@@ -1,0 +1,2 @@
+# safedesk-stories
+Stories generation
