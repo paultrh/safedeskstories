@@ -1,0 +1,100 @@
+[
+  {
+  "story_name": "SecuGov mission",
+  "idLink": 1,
+  "sender": "john.gary@direction.com",
+  "subject": "New possible client SecuGov",
+  "body": "NewPossibleClientSecuGov.md",
+  "requiredFile": [ "contact.doc" ],
+  "good": {
+    "keywoards": [ "04 51 43 67 99" ],
+    "score": 10,
+    "link": "2"
+  },
+  "bad" : {
+    "score": -10,
+    "link": "3"
+  },
+  "timeOut": {
+    "link": "4"
+  }
+},
+{
+  "story_name": "SecuGov mission",
+  "idLink": 2,
+  "sender": "john.gary@direction.com",
+  "subject": "Meeting with SecuGov on Wednesday",
+  "body": "MeetingWithSecuGovOnWednesday.md",
+  "requiredFile": [ "contact.doc" ],
+  "good": {
+    "keywoards": [ "Lafor", "39", "3 17 73 14 10"],
+    "score": 20,
+    "link": "5"
+  },
+  "bad" : {
+    "score": -10,
+    "link": "4"
+  },
+  "timeOut": {
+    "link": "4"
+  }
+},
+{
+  "story_name": "SecuGov mission",
+  "idLink": 3,
+  "sender": "john.gary@direction.com",
+  "subject": "Wrong phone number",
+  "body": "WrongPhoneNumber.md",
+  "requiredFile": [ "contact.doc" ],
+  "good": {
+    "keywoards": [ "04 51 43 67 99" ],
+    "score": 20,
+    "link": "2"
+  },
+  "bad" : {
+    "score": -10,
+    "link": "4"
+  },
+  "timeOut": {
+    "link": "4"
+  }
+},
+{
+  "story_name": "SecuGov mission",
+  "idLink": 4,
+  "sender": "john.gary@direction.com",
+  "subject": "Client went to concurrency",
+  "body": "ClientWentToConcurrency.md",
+  "good": {
+    "score": -10,
+    "link": "-1"
+  },
+  "bad" : {
+    "score": -10,
+    "link": "-1"
+  },
+  "timeOut": {
+    "link": "-1"
+  }
+},
+{
+  "story_name": "SecuGov mission",
+  "idLink": 5,
+  "sender": "john.gary@direction.com",
+  "subject": "Financial control",
+  "body": "FinancialControl.md",
+  "requiredFile": [ "secuGovFinance.doc" ],
+  "good": {
+    "keywoards": [ "1 050 000", "70" ],
+    "score": 100,
+    "link": "-1"
+  },
+  "bad" : {
+    "score": -20,
+    "link": "4"
+  },
+  "timeOut": {
+    "link": "-1"
+  }
+}
+]
