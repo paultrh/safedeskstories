@@ -57,7 +57,6 @@ class quest():
     good = None
     bad = None
     timeOut = None
-    serialize = OrderedDict()
     
     def __init__(self, start_id, current_id, story_name, sender, subject, body, keywords, score, is_bad, is_timeout):
         self.start_id = current_id
@@ -77,18 +76,19 @@ class quest():
         self.timeOut = TimeOut(score, start_id, is_bad, is_timeout)
 
     def toJSON(self):
-        self.serialize['start_id'] = self.start_id
-        self.serialize['story_name'] = self.story_name
-        self.serialize['sender'] = self.sender
-        self.serialize['subject'] = self.subject
-        self.serialize['body'] = self.body
-        self.serialize['keywords'] = self.keywords
-        self.serialize['score'] = self.score
-        self.serialize['good'] = self.good
-        self.serialize['bad'] = self.bad
-        self.serialize['timeOut'] = self.timeOut
-        
-        return json.dumps(self.serialize, default=lambda o: o.__dict__, 
+        serialize = OrderedDict([
+            ('start_id', self.start_id),
+            ('story_name', self.story_name),
+            ('sender', self.sender),
+            ('subject', self.subject),
+            ('body', self.body),
+            ('keywords', tuple(self.keywords)),
+            ('good', self.good),
+            ('bad', self.bad),
+            ('timeOut', self.timeOut),
+          ])
+
+        return json.dumps(serialize, default=lambda o: o.__dict__, 
             sort_keys=False, indent=4)
 
 def generate(start_id, sender, score, is_last, story_name):
