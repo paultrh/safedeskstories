@@ -2,9 +2,12 @@ import os
 import faker
 
 story_type = 'Contact'
+
 init_subject = 'Starting partnership'
 bad_subject = 'Wrong phone number'
 timeout_subject = 'Customer went to concurrency'
+
+body_init = ''
 
 def create_object(start_id, current_id, story_name, sender, subject,
         body, keywords, score, is_bad, is_timeout):
@@ -57,8 +60,14 @@ def generate(start_id, sender, score, is_last, story_name):
     json += create_object(start_id, start_id + 2, story_name, sender, timeout_subject,
             "timeOut" + story_type  + "Quest" + str(start_id) + ".md", ['izi', 'php'], score, False, True)
     print(json)
+    return json
 
-def generateQuestMail():
+def generateInitQuestMail():
+    res = ''
+    res += '# Formules de politesse' + os.linesep
+    res += body_init + os.linesep
+    res += 'Formules de courtoisie' + os.linesep
+    res += 'Signature' + os.linesep
     print("lol")
 
 generate(1, "johndoe@gmail.com", 400, False, "plop")
