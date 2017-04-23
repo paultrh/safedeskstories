@@ -12,10 +12,16 @@ class Linker():
         
         
     def populate(self):
-        self.serialize = OrderedDict([
-            ('link', str(self.linkId)),
-            ('score', self.score),
-          ])
+        if (self.linkId == None):
+            self.serialize = OrderedDict([
+                ('link', self.linkId),
+                ('score', self.score),
+              ])
+        else:
+            self.serialize = OrderedDict([
+                ('link', str(self.linkId)),
+                ('score', self.score),
+              ])
 
 class Good(Linker):
     def __init__(self, score, linkId, is_bad, is_timeout):
