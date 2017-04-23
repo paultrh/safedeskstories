@@ -87,6 +87,16 @@ class CompanyModel():
 
         self.WriteToFile(self.company + 'Description');
 
+     # TODO no more hardcode
+    def generateJSONforFile(self, name, ext, theme):
+        var = ""
+        var = var + "{" + '\n'
+        var = var + '"filename": "'+name+'",' + '\n'
+        var = var + '"extension": "'+ext+'"' + '\n'
+        var = var + "}"
+        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
+            myfile.write(var)
+            
     def WriteToFile(self, filename):
         company = ""
         company += "# " + self.company +" Company"+ '\n\n\n'
@@ -128,6 +138,8 @@ class CompanyModel():
             os.makedirs('Story/doc/' + self.company)
         with open(os.path.join('Story/doc/' + self.company + '/' + filename), "w+") as myfile:
             myfile.write(company)
+
+        self.generateJSONforFile(self.company + '/' + filename, ".docx", 'Story/doc/')
 
 
 #### QUEST GENERATION ####        
@@ -195,15 +207,7 @@ class Company(Quest):
         txt += '>' + self.content.replace(os.linesep, os.linesep + '>')
         return txt
 
-    # TODO no more hardcode
-    def generateJSONforFile(self, name, ext, theme):
-        var = ""
-        var = var + "{" + '\n'
-        var = var + '"filename": "'+name+'",' + '\n'
-        var = var + '"extension": "'+ext+'"' + '\n'
-        var = var + "}"
-        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
-            myfile.write(var)
+   
 
     def generateEmail(self, company):
         txt = ""
@@ -229,7 +233,6 @@ class Company(Quest):
         self.content = txt
         with open(os.path.join('Story', self.body), "w") as myfile:
             myfile.write(txt)
-        self.generateJSONforFile(self.body, ".docx", 'Story')
         return txt
 
 # NOTE : Should refactor but may divert from one quest to another

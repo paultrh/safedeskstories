@@ -13,7 +13,7 @@ class Linker():
         
     def populate(self):
         self.serialize = OrderedDict([
-            ('linkId', self.linkId),
+            ('link', str(self.linkId)),
             ('score', self.score),
           ])
 
@@ -95,15 +95,15 @@ class Quest():
 
     def toJSON(self):
         serialize = OrderedDict([
-            ('current_id', self.current_id),
-            ('story_name', self.story_name),
+            #('current_id', str(self.current_id)),
+            ('name', str(self.current_id)),
             ('sender', self.sender),
             ('subject', self.subject),
-            ('body', self.body),
+            ('content', self.body[:-3]),
             ('keywords', tuple(self.keywords)),
             ('good', self.good),
             ('bad', self.bad),
-            ('timeOut', self.timeOut),
+            ('timeout', self.timeOut),
           ])
 
         return serialize

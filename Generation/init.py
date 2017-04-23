@@ -30,12 +30,11 @@ if (len(sys.argv) > 1  and len(sys.argv) < 4):
         tmp = []
         count = 1
         for x in story:
-            for i in x:
-                tmp.append(i)
-                if (count % 3 == 0):
-                    tmpGlobal.append(tuple(tmp))
-                    tmp =  []
-                count += 1
+            tmp.append(x)
+            if (count % 3 == 0):
+                tmpGlobal.append(tuple(tmp))
+                tmp =  []
+            count += 1
 
         last_good = 0
         last_bad = 0
@@ -44,25 +43,25 @@ if (len(sys.argv) > 1  and len(sys.argv) < 4):
             contentInit = ""
             contentBad = ""
             contentTimeOut = ""
-            with open(sys.argv[1] + '/' + quest[0].body) as data_file:
+            with open(sys.argv[1] + '/' + quest[0].content + '.md') as data_file:
                 contentInit = data_file.read()
-            with open(sys.argv[1] + '/' + quest[0].body) as data_file:
+            with open(sys.argv[1] + '/' + quest[1].content + '.md') as data_file:
                 contentBad = data_file.read()
-            with open(sys.argv[1] + '/' + quest[0].body) as data_file:
+            with open(sys.argv[1] + '/' + quest[2].content + '.md') as data_file:
                 contentTimeOut = data_file.read()
-            dot.node(str(quest[0].current_id), contentInit.replace('\n', "\\n"))
-            dot.node(str(quest[1].current_id), contentBad.replace('\n', "\\n"))
-            dot.node(str(quest[2].current_id), contentTimeOut.replace('\n', "\\n"), style='filled', fillcolor='red')
+            dot.node(str(quest[0].name), contentInit.replace('\n', "\\n"))
+            dot.node(str(quest[1].name), contentBad.replace('\n', "\\n"))
+            dot.node(str(quest[2].name), contentTimeOut.replace('\n', "\\n"), style='filled', fillcolor='red')
 
                 
-            dot.edge(str(quest[0].current_id),str(quest[1].current_id), color='orange')
-            dot.edge(str(quest[0].current_id),str(quest[2].current_id), color='red')
-            dot.edge(str(quest[1].current_id),str(quest[2].current_id), color='red')
+            dot.edge(str(quest[0].name),str(quest[1].name), color='orange')
+            dot.edge(str(quest[0].name),str(quest[2].name), color='red')
+            dot.edge(str(quest[1].name),str(quest[2].name), color='red')
             if (last_good != 0 and last_bad != 0):
-                dot.edge(last_good,str(quest[0].current_id), color='green')
-                dot.edge(last_bad,str(quest[0].current_id), color='green')
-            last_good = str(quest[0].current_id)
-            last_bad = str(quest[1].current_id)
+                dot.edge(last_good,str(quest[0].name), color='green')
+                dot.edge(last_bad,str(quest[0].name), color='green')
+            last_good = str(quest[0].name)
+            last_bad = str(quest[1].name)
                 
         dot.node("END", style='filled', fillcolor='green')
         dot.edge(last_good,"END", color='green')

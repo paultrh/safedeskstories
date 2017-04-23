@@ -42,6 +42,16 @@ class User():
 
         self.WriteToFile(self.companyName + 'Contact');
 
+    # TODO no more hardcode
+    def generateJSONforFile(self, name, ext, theme):
+        var = ""
+        var = var + "{" + '\n'
+        var = var + '"filename": "'+name+'",' + '\n'
+        var = var + '"extension": "'+ext+'"' + '\n'
+        var = var + "}"
+        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
+            myfile.write(var)
+            
     def WriteToFile(self, filename):
         people = ""
         people += "### " + self.name + os.linesep
@@ -56,6 +66,7 @@ class User():
             os.makedirs('Story/doc/' + self.companyName)
         with open(os.path.join('Story/doc/' + self.companyName, filename), "a+") as myfile:
             myfile.write(people)
+        self.generateJSONforFile(filename, ".txt", 'Story/doc/' + self.companyName)
 
     
 
@@ -99,15 +110,7 @@ class Contact(Quest):
         txt += '>' + self.content.replace(os.linesep, os.linesep + '>')
         return txt
 
-    # TODO no more hardcode
-    def generateJSONforFile(self, name, ext, theme):
-        var = ""
-        var = var + "{" + '\n'
-        var = var + '"filename": "'+name+'",' + '\n'
-        var = var + '"extension": "'+ext+'"' + '\n'
-        var = var + "}"
-        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
-            myfile.write(var)
+    
 
     def generateEmail(self, user):
         txt = ""
@@ -133,7 +136,7 @@ class Contact(Quest):
         self.content = txt
         with open(os.path.join('Story', self.body), "w") as myfile:
             myfile.write(txt)
-        self.generateJSONforFile(self.body, ".txt", 'Story')
+        
         return txt
 
 # NOTE : Should refactor but may divert from one quest to another
