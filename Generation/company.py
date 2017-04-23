@@ -202,7 +202,7 @@ class Company(Quest):
         var = var + '"filename": "'+name+'",' + '\n'
         var = var + '"extension": "'+ext+'"' + '\n'
         var = var + "}"
-        with open(os.path.join(theme, name + ".json"), "a+") as myfile:
+        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
             myfile.write(var)
 
     def generateEmail(self, company):
