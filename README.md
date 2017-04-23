@@ -10,15 +10,17 @@ Stories generation
 - Faker, used to generate fake data
 
 ```sh
-$ pip3 install faker
+$ pip install faker
+$ pip install graphviz
 ```
 
 ## Usage
 
-To lauch a script
+Usefull command
 
 ```sh
 $ python3 [script.py]
+$ python3 init.py [FolderToAnalyse] [Output]
 ```
 
 ## TODO
