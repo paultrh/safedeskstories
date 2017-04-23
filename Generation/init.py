@@ -97,9 +97,7 @@ class Story():
         self.quests = quests
 
     def toJSON(self):
-        serialize = OrderedDict([
-            ('quests', tuple((o.toJSON() for o in self.quests))),
-        ])
+        serialize = list((o.toJSON() for o in self.quests))
 
         return json.dumps(serialize, default=lambda o: o.__dict__, 
             sort_keys=False, indent=4)
