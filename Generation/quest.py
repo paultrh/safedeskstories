@@ -7,11 +7,12 @@ class Linker():
     score = 0
     serialize = {}
     islast = 0
-    def __init__(self, score, linkId, is_bad, is_timeout, islast):
+    level = 0
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
         self.islast = islast
         self.score = score
         self.linkId = linkId
-        
+        self.level = level
         
     def populate(self):
         if (self.linkId == None):
@@ -20,22 +21,23 @@ class Linker():
                 ('score', self.score),
               ])
         else:
+            self.linkId = self.level + str(self.linkId)
             self.serialize = OrderedDict([
-                ('link', str(self.linkId)),
+                ('link', self.linkId),
                 ('score', self.score),
               ])
 
 class Good(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout, islast):
-        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast)
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
+        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level)
         self.linkId = linkId + 3
         if (islast):
             self.linkId = None
         self.populate()
         
 class Bad(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout, islast):
-        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast)
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
+        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level)
         if is_bad:
             self.linkId = linkId + 2
         elif is_timeout:
@@ -46,8 +48,8 @@ class Bad(Linker):
         self.populate()
 
 class TimeOut(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout, islast):
-        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast)
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
+        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level)
         if is_timeout:
             self.linkId = None
         else:
@@ -88,11 +90,11 @@ class Quest():
         self.is_bad = is_bad
         self.is_timeout = is_timeout
         if is_timeout:
-            self.good = TimeOut(score, start_id, is_bad, is_timeout, islast).serialize
+            self.good = TimeOut(score, start_id, is_bad, is_timeout, islast, level).serialize
         else:
-            self.good = Good(score, start_id, is_bad, is_timeout, islast).serialize
-        self.bad = Bad(score, start_id, is_bad, is_timeout, islast).serialize
-        self.timeOut = TimeOut(score, start_id, is_bad, is_timeout, islast).serialize
+            self.good = Good(score, start_id, is_bad, is_timeout, islast, level).serialize
+        self.bad = Bad(score, start_id, is_bad, is_timeout, islast, level).serialize
+        self.timeOut = TimeOut(score, start_id, is_bad, is_timeout, islast, level).serialize
 
         self.content = 0
         self.signature = signature

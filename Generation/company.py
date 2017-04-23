@@ -91,13 +91,13 @@ class CompanyModel():
         self.WriteToFile(self.company + 'Description');
 
      # TODO no more hardcode
-    def generateJSONforFile(self, name, ext, theme):
+    def generateJSONforFile(self, name, ext):
         var = ""
         var = var + "{" + '\n'
-        var = var + '"filename": "'+name+'",' + '\n'
+        var = var + '"filename": "'+os.path.basename(name)+'",' + '\n'
         var = var + '"extension": "'+ext+'"' + '\n'
         var = var + "}"
-        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
+        with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
             
     def WriteToFile(self, filename):
@@ -136,13 +136,14 @@ class CompanyModel():
         company += "### Employees" + '\n\n'
         company +=  self.company + " are composed of **" + self.nbEmployee + "** employees" + '\n'
         company += "The overall satisfaction rate is " + random.choice(quali)+ " **" + self.satisfaction_rate + '%** \n'
-
-        if not os.path.exists(self.level + '/doc/'+self.company):
-            os.makedirs(self.level + '/doc/' + self.company)
-        with open(os.path.join(self.level + '/doc/'+self.company + '/' + filename), "w+") as myfile:
+        folder = (self.level + '/doc/'+self.company).replace(" ", "")
+        filename = (self.level + '/doc/'+self.company + '/' + filename).replace(" ", "")
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        with open(os.path.join(filename+'.md'), "w+") as myfile:
             myfile.write(company)
 
-        self.generateJSONforFile(self.company + '/' + filename, ".docx", self.level + '/doc/')
+        self.generateJSONforFile(filename, ".docx")
 
 
 #### QUEST GENERATION ####        

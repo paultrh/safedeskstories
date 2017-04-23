@@ -193,6 +193,4 @@ for i in range(1, 3):
         os.makedirs(level)
     with open(os.path.join(level, 'init.json'), "w") as myfile:
         myfile.write(story.toJSON())
-                  
-story.ShowGraph()
 

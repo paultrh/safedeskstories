@@ -45,13 +45,13 @@ class User():
         self.WriteToFile(self.companyName + 'Contact');
 
     # TODO no more hardcode
-    def generateJSONforFile(self, name, ext, theme):
+    def generateJSONforFile(self, name, ext):
         var = ""
         var = var + "{" + '\n'
-        var = var + '"filename": "'+name+'",' + '\n'
+        var = var + '"filename": "'+os.path.basename(name)+'",' + '\n'
         var = var + '"extension": "'+ext+'"' + '\n'
         var = var + "}"
-        with open(os.path.join(theme, name[:-3] + ".json"), "a+") as myfile:
+        with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
             
     def WriteToFile(self, filename):
@@ -64,11 +64,13 @@ class User():
         people += "Years in the field: " + self.years_in_field + os.linesep
         people += "Married: " + self.married + os.linesep
         people += "Last connection: "  + self.last_connection  + os.linesep + os.linesep
-        if not os.path.exists(self.level + '/doc/' + self.companyName):
-            os.makedirs(self.level + '/doc/' + self.companyName)
-        with open(os.path.join(self.level + '/doc/' + self.companyName, filename), "a+") as myfile:
+        folder = (self.level + '/doc/' + self.companyName).replace(" ", "")
+        filename = (self.level + '/doc/' + self.companyName + '/' + filename).replace(" ", "")
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        with open(os.path.join(filename +'.md'), "a+") as myfile:
             myfile.write(people)
-        self.generateJSONforFile(filename, ".txt", self.level + '/doc/' + self.companyName)
+        self.generateJSONforFile(filename, ".txt")
 
     
 
