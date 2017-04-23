@@ -1,0 +1,44 @@
+[
+  {
+    "firstname" : "Audrey",
+    "lastname" : "Austin",
+    "email" : "audrey.austin35@gmail.com",
+    "service" : "business",
+    "avatar": "female/1.jpg"
+  },
+  {
+    "firstname" : "Miguel",
+    "lastname" : "Morgan",
+    "email" : "miguel.morgan54@gmail.com",
+    "service" : "management",
+    "avatar": "male/1.jpg"
+  },
+  {
+    "firstname" : "Veronica",
+    "lastname" : "Cruz",
+    "email" : "veronica.cruz29@outlook.com",
+    "service" : "business",
+    "avatar": "female/14.jpg"
+  },
+  {
+    "firstname" : "Marshall",
+    "lastname" : "Perez",
+    "email" : "marshall.perez61@hotmail.com",
+    "service" : "management",
+    "avatar": "male/4.jpg"
+  },
+  {
+    "firstname" : "Amber",
+    "lastname" : "Mendoza",
+    "email" : "amber.mendoza19@outlook.com",
+    "service" : "business",
+    "avatar": "female/25.jpg"
+  },
+  {
+    "firstname" : "Samuel",
+    "lastname" : "Cunning",
+    "email" : "samuel.cunningham85@yahoo.com",
+    "service" : "business",
+    "avatar": "male/9.jpg"
+  }
+]

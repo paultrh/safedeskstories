@@ -1,22 +1,21 @@
 import os
+import json
 from quest import Quest
 from faker import Faker
 import json
 from collections import OrderedDict
 import random
 
+
 functions = ['Employee', 'Manager', 'Engineer', 'Intern', 'Sales person', 'Technician', 'Consultant']
-contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
-local = random.choice(contries)
-fake = Faker(local)
 
 story_type = 'Contact'
-
 init_subject = 'Starting partnership'
 bad_subject = 'Wrong information'
 timeout_subject = 'Customer went to concurrency'
 
-body_init = ''
+
+#### DOCUMENT GENERATION ####
 
 class User():
     name = ""
@@ -28,8 +27,10 @@ class User():
     married = ""
     last_connection = ""
     attrDict = {}
+    companyName = ""
     
-    def __init__(self, domain):
+    def __init__(self, domain, companyName, fake):
+        self.companyName = companyName
         self.name = fake.name()
         self.phone_number = str(fake.phone_number())
         self.email = self.name.replace(" ", "")+"@"+ domain
@@ -39,29 +40,33 @@ class User():
         self.married = str(fake.boolean(chance_of_getting_true=20))
         self.last_connection = fake.time(pattern="%H:%M:%S")
 
+        self.WriteToFile(self.companyName + 'Contact');
+
     def WriteToFile(self, filename):
         people = ""
-        people += "### " + user + os.linesep()
-        people += "Phone number: " + str(fake.phone_number()) +  + os.linesep()
-        people += "Email: " + user.replace(" ", "")+"@"+ domain +  + os.linesep()
-        people += "Function: " + role +  os.linesep()
-        people += "Age: " + str(random.randint(25, 75)) + os.linesep()
-        people += "Years in the field: " + str(random.randint(1, 23))  + os.linesep()
-        people += "Married: " + str(fake.boolean(chance_of_getting_true=20))  + os.linesep()
-        people += "Last connection: "  + fake.time(pattern="%H:%M:%S")  + os.linesep() + os.linesep()
-        with open(os.path.join(theme, filename), "a+") as myfile:
+        people += "### " + self.name + os.linesep
+        people += "Phone number: " + self.phone_number + os.linesep
+        people += "Email: " + self.email + os.linesep
+        people += "Function: " + self.function +  os.linesep
+        people += "Age: " + self.age + os.linesep
+        people += "Years in the field: " + self.years_in_field + os.linesep
+        people += "Married: " + self.married + os.linesep
+        people += "Last connection: "  + self.last_connection  + os.linesep + os.linesep
+        if not os.path.exists('Story/doc/' + self.companyName):
+            os.makedirs('Story/doc/' + self.companyName)
+        with open(os.path.join('Story/doc/' + self.companyName, filename), "a+") as myfile:
             myfile.write(people)
 
     
 
-        
+#### QUEST GENERATION ####        
                 
 class Contact(Quest):
     
     def __init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout):
+                 subject, body, keywords, score, is_bad, is_timeout, signature):
         Quest.__init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout)
+                 subject, body, keywords, score, is_bad, is_timeout, signature)
 
 
     def questionBody(self, user):
@@ -78,7 +83,6 @@ class Contact(Quest):
         txt += "I am looking for the "
         res = random.choice(list(lNotUnary.items()))
         txt += res[0]
-
         self.keywords.append(res[1])
         txt += " of a specific employee whose "
         tmp = random.choice(list(lUnary.items()))
@@ -94,6 +98,16 @@ class Contact(Quest):
         
         txt += '>' + self.content.replace(os.linesep, os.linesep + '>')
         return txt
+
+    # TODO no more hardcode
+    def generateJSONforFile(self, name, ext, theme):
+        var = ""
+        var = var + "{" + '\n'
+        var = var + '"filename": "'+name+'",' + '\n'
+        var = var + '"extension": "'+ext+'"' + '\n'
+        var = var + "}"
+        with open(os.path.join(theme, name + ".json"), "a+") as myfile:
+            myfile.write(var)
 
     def generateEmail(self, user):
         txt = ""
@@ -113,32 +127,42 @@ class Contact(Quest):
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep
-        txt += "" + os.linesep
-        if not os.path.exists('Doc'):
-            os.makedirs('Doc')
+        txt += self.signature + os.linesep
+        if not os.path.exists('Story'):
+            os.makedirs('Story')
         self.content = txt
-        with open(os.path.join('Doc', self.body), "w") as myfile:
+        with open(os.path.join('Story', self.body), "w") as myfile:
             myfile.write(txt)
+        self.generateJSONforFile(self.body, ".txt", 'Story')
         return txt
 
-# NOTE : Should refactor
-def generate(start_id, sender, score, is_last, story_name):
+# NOTE : Should refactor but may divert from one quest to another
+def generateContact(start_id, sender, score, is_last, story_name, signature, fake):
+    companyName = 'secuGov'
+    # Create Fake Data
+    for i in range(0, random.randint(5, 15)):
+        User('gmail.com', companyName, fake)
+
+    # Create Specific Content
     questList = []
     init = Contact(start_id, start_id, story_name, sender, init_subject,
-            "init" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, False)
-    init.generateEmail(User('gmail.com'))
+            "init" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, False, signature)
+    init.generateEmail(User('gmail.com', companyName, fake))
     bad = Contact(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + ".md", [], score, True, False)
+            "bad" + story_type  + "Quest" + str(start_id) + ".md", [], score, True, False, signature)
     bad.content = init.content
     bad.keywords = init.keywords
     timeOut = Contact(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, True)
+            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, True, signature)
     questList.append(init)
     questList.append(bad)
     questList.append(timeOut)
 
+    bad.generateEmail(User('gmail.com', companyName, fake))
+    timeOut.generateEmail(User('gmail.com', companyName, fake))
 
-    bad.generateEmail(User('gmail.com'))
-    timeOut.generateEmail(User('gmail.com'))
+    # Create Fake Data
+    for i in range(0, random.randint(5, 15)):
+        User('gmail.com', companyName, fake)
 
     return questList

@@ -61,9 +61,10 @@ class Quest():
     bad = None
     timeOut = None
     content = None
+    signature = ""
     
     def __init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout):
+                 subject, body, keywords, score, is_bad, is_timeout, signature):
         self.start_id = start_id
         self.current_id = current_id
         self.story_name = story_name
@@ -82,6 +83,7 @@ class Quest():
         self.timeOut = TimeOut(score, start_id, is_bad, is_timeout).serialize
 
         self.content = 0
+        self.signature = signature
 
     def timeOutBody(self):
         txt = ""
