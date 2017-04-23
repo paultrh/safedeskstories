@@ -170,12 +170,16 @@ fake = Faker(local)
 
 quests = []
 idcount = 1
-for i in range(1, 4):
+maxi = 4
+for i in range(1, maxi):
     destiny = random.choice(scenario)
+    isLast = False
+    if (i == maxi - 1):
+        isLast = True
     if (destiny == 'contact'):
-        quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake)
+        quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast)
     elif (destiny == 'company'):
-        quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake)
+        quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake, isLast)
     idcount += 3
 
 story = Story(quests)

@@ -24,9 +24,12 @@ class Linker():
               ])
 
 class Good(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout):
+    def __init__(self, score, linkId, is_bad, is_timeout, isLast):
         Linker.__init__(self, score, linkId, is_bad, is_timeout)
-        self.linkId = linkId + 3
+        if (isLast):
+            self.linkId = None
+        else:
+            self.linkId = linkId + 3
         self.populate()
         
 class Bad(Linker):
@@ -70,7 +73,7 @@ class Quest():
     signature = ""
     
     def __init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature):
+                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast):
         self.start_id = start_id
         self.current_id = current_id
         self.story_name = story_name
@@ -84,7 +87,7 @@ class Quest():
         if is_timeout:
             self.good = TimeOut(score, start_id, is_bad, is_timeout).serialize
         else:
-            self.good = Good(score, start_id, is_bad, is_timeout).serialize
+            self.good = Good(score, start_id, is_bad, is_timeout, isLast).serialize
         self.bad = Bad(score, start_id, is_bad, is_timeout).serialize
         self.timeOut = TimeOut(score, start_id, is_bad, is_timeout).serialize
 

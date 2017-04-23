@@ -147,9 +147,9 @@ class CompanyModel():
 class Company(Quest):
     
     def __init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature):
+                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast):
         Quest.__init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature)
+                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast)
 
 
     def questionBody(self, company):
@@ -236,20 +236,20 @@ class Company(Quest):
         return txt
 
 # NOTE : Should refactor but may divert from one quest to another
-def generateCompany(start_id, sender, score, is_last, story_name, signature, fake):
+def generateCompany(start_id, sender, score, is_last, story_name, signature, fake, isLast):
     companyName = 'secuGov'
 
     # Create Specific Content
     questList = []
     init = Company(start_id, start_id, story_name, sender, init_subject,
-            "init" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, False, signature)
+            "init" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, False, signature, isLast)
     init.generateEmail(CompanyModel('gmail.com', fake))
     bad = Company(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + ".md", [], score, True, False, signature)
+            "bad" + story_type  + "Quest" + str(start_id) + ".md", [], score, True, False, signature, isLast)
     bad.content = init.content
     bad.keywords = init.keywords
     timeOut = Company(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, True, signature)
+            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, True, signature, isLast)
     questList.append(init)
     questList.append(bad)
     questList.append(timeOut)
