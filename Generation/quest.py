@@ -14,7 +14,7 @@ class Linker():
         
         
     def populate(self):
-        if (self.islast):
+        if (self.islast or self.linkId == None):
             self.serialize = OrderedDict([
                 ('link', self.linkId),
                 ('score', self.score),

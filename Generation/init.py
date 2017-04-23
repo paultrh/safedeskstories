@@ -165,9 +165,11 @@ for i in range(0, nb_iteration):
 scenario = ['contact', 'company']
 
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
-level = 0
+level = "out"
+if not os.path.exists(level):
+        os.makedirs(level)
 for i in range(1, 3):
-    level = str(i)
+    level = "out/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
 
