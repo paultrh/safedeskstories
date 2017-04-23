@@ -165,29 +165,32 @@ for i in range(0, nb_iteration):
 scenario = ['contact', 'company']
 
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
-local = random.choice(contries)
-fake = Faker(local)
+level = 0
+for i in range(1, 3):
+    level = str(i)
+    local = random.choice(contries)
+    fake = Faker(local)
 
-quests = []
-idcount = 1
-maxi = 4
-for i in range(1, maxi):
-    destiny = random.choice(scenario)
-    isLast = False
-    if (i == maxi - 1):
-        isLast = True
-    if (destiny == 'contact'):
-        quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast)
-    elif (destiny == 'company'):
-        quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake, isLast)
-    idcount += 3
+    quests = []
+    idcount = 1
+    maxi = 4
+    for i in range(1, maxi):
+        destiny = random.choice(scenario)
+        isLast = False
+        if (i == maxi - 1):
+            isLast = True
+        if (destiny == 'contact'):
+            quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
+        elif (destiny == 'company'):
+            quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
+        idcount += 3
 
-story = Story(quests)
+    story = Story(quests)
 
-if not os.path.exists('Story'):
-    os.makedirs('Story')
-with open(os.path.join('Story', 'init.json'), "w") as myfile:
-    myfile.write(story.toJSON())
+    if not os.path.exists(level):
+        os.makedirs(level)
+    with open(os.path.join(level, 'init.json'), "w") as myfile:
+        myfile.write(story.toJSON())
                   
 story.ShowGraph()
 

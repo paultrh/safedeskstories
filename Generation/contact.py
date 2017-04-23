@@ -18,6 +18,7 @@ timeout_subject = 'Customer went to concurrency'
 #### DOCUMENT GENERATION ####
 
 class User():
+    level = 0
     name = ""
     phone_number = ""
     email = ""
@@ -29,7 +30,8 @@ class User():
     attrDict = {}
     companyName = ""
     
-    def __init__(self, domain, companyName, fake):
+    def __init__(self, domain, companyName, fake, level):
+        self.level = level
         self.companyName = companyName
         self.name = fake.name()
         self.phone_number = str(fake.phone_number())
@@ -62,11 +64,11 @@ class User():
         people += "Years in the field: " + self.years_in_field + os.linesep
         people += "Married: " + self.married + os.linesep
         people += "Last connection: "  + self.last_connection  + os.linesep + os.linesep
-        if not os.path.exists('Story/doc/' + self.companyName):
-            os.makedirs('Story/doc/' + self.companyName)
-        with open(os.path.join('Story/doc/' + self.companyName, filename), "a+") as myfile:
+        if not os.path.exists(self.level + '/doc/' + self.companyName):
+            os.makedirs(self.level + '/doc/' + self.companyName)
+        with open(os.path.join(self.level + '/doc/' + self.companyName, filename), "a+") as myfile:
             myfile.write(people)
-        self.generateJSONforFile(filename, ".txt", 'Story/doc/' + self.companyName)
+        self.generateJSONforFile(filename, ".txt", self.level + '/doc/' + self.companyName)
 
     
 
@@ -75,9 +77,11 @@ class User():
 class Contact(Quest):
     
     def __init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast):
+                 subject, body, keywords, score, is_bad, is_timeout, signature,
+                 isLast, level):
         Quest.__init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast)
+                 subject, body, keywords, score, is_bad, is_timeout, signature,
+                       isLast, level)
 
 
     def questionBody(self, user):
@@ -131,41 +135,45 @@ class Contact(Quest):
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep
         txt += self.signature + os.linesep
-        if not os.path.exists('Story'):
-            os.makedirs('Story')
+        if not os.path.exists(self.level):
+            os.makedirs(self.level)
         self.content = txt
-        with open(os.path.join('Story', self.body), "w") as myfile:
+        with open(os.path.join(self.level, self.body), "w") as myfile:
             myfile.write(txt)
         
         return txt
 
 # NOTE : Should refactor but may divert from one quest to another
-def generateContact(start_id, sender, score, is_last, story_name, signature, fake, isLast):
+def generateContact(start_id, sender, score, is_last, story_name, signature, fake,
+                    isLast, level):
     companyName = 'secuGov'
     # Create Fake Data
     for i in range(0, random.randint(5, 15)):
-        User('gmail.com', companyName, fake)
+        User('gmail.com', companyName, fake, level)
 
     # Create Specific Content
     questList = []
     init = Contact(start_id, start_id, story_name, sender, init_subject,
-            "init" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, False, signature, isLast)
-    init.generateEmail(User('gmail.com', companyName, fake))
+            "init" + story_type  + "Quest" + str(start_id) + ".md", [],
+                   score, False, False, signature, isLast, level)
+    init.generateEmail(User('gmail.com', companyName, fake, level))
     bad = Contact(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + ".md", [], score, True, False, signature, isLast)
+            "bad" + story_type  + "Quest" + str(start_id) + ".md", [],
+                  score, True, False, signature, isLast, level)
     bad.content = init.content
     bad.keywords = init.keywords
     timeOut = Contact(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, True, signature, isLast)
+            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [],
+                      score, False, True, signature, isLast, level)
     questList.append(init)
     questList.append(bad)
     questList.append(timeOut)
 
-    bad.generateEmail(User('gmail.com', companyName, fake))
-    timeOut.generateEmail(User('gmail.com', companyName, fake))
+    bad.generateEmail(User('gmail.com', companyName, fake, level))
+    timeOut.generateEmail(User('gmail.com', companyName, fake, level))
 
     # Create Fake Data
     for i in range(0, random.randint(5, 15)):
-        User('gmail.com', companyName, fake)
+        User('gmail.com', companyName, fake, level)
 
     return questList

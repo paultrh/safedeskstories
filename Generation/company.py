@@ -17,6 +17,8 @@ timeout_subject = 'Transfer case'
 
 #### DOCUMENT GENERATION ####
 class CompanyModel():
+    level = 0
+    
     #Unique
     company = ""
     legal_id = ""
@@ -50,7 +52,8 @@ class CompanyModel():
     chrome_agent = ""
     
 
-    def __init__(self, domain, fake):
+    def __init__(self, domain, fake, level):
+        self.level = level
         #Unique
         self.company = fake.company()
         self.company = self.company.replace(".", "")
@@ -134,12 +137,12 @@ class CompanyModel():
         company +=  self.company + " are composed of **" + self.nbEmployee + "** employees" + '\n'
         company += "The overall satisfaction rate is " + random.choice(quali)+ " **" + self.satisfaction_rate + '%** \n'
 
-        if not os.path.exists('Story/doc/'+self.company):
-            os.makedirs('Story/doc/' + self.company)
-        with open(os.path.join('Story/doc/' + self.company + '/' + filename), "w+") as myfile:
+        if not os.path.exists(self.level + '/doc/'+self.company):
+            os.makedirs(self.level + '/doc/' + self.company)
+        with open(os.path.join(self.level + '/doc/'+self.company + '/' + filename), "w+") as myfile:
             myfile.write(company)
 
-        self.generateJSONforFile(self.company + '/' + filename, ".docx", 'Story/doc/')
+        self.generateJSONforFile(self.company + '/' + filename, ".docx", self.level + '/doc/')
 
 
 #### QUEST GENERATION ####        
@@ -147,9 +150,11 @@ class CompanyModel():
 class Company(Quest):
     
     def __init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast):
+                 subject, body, keywords, score, is_bad, is_timeout, signature,
+                 isLast, level):
         Quest.__init__(self, start_id, current_id, story_name, sender,
-                 subject, body, keywords, score, is_bad, is_timeout, signature, isLast)
+                 subject, body, keywords, score, is_bad, is_timeout, signature,
+                       isLast, level)
 
 
     def questionBody(self, company):
@@ -228,37 +233,41 @@ class Company(Quest):
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep
         txt += self.signature + os.linesep
-        if not os.path.exists('Story'):
-            os.makedirs('Story')
+        if not os.path.exists(self.level):
+            os.makedirs(self.level)
         self.content = txt
-        with open(os.path.join('Story', self.body), "w") as myfile:
+        with open(os.path.join(self.level, self.body), "w") as myfile:
             myfile.write(txt)
         return txt
 
 # NOTE : Should refactor but may divert from one quest to another
-def generateCompany(start_id, sender, score, is_last, story_name, signature, fake, isLast):
+def generateCompany(start_id, sender, score, is_last, story_name, signature, fake,
+                    isLast, level):
     companyName = 'secuGov'
 
     # Create Specific Content
     questList = []
     init = Company(start_id, start_id, story_name, sender, init_subject,
-            "init" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, False, signature, isLast)
-    init.generateEmail(CompanyModel('gmail.com', fake))
+            "init" + story_type  + "Quest" + str(start_id) + ".md", [],
+                   score, False, False, signature, isLast, level)
+    init.generateEmail(CompanyModel('gmail.com', fake, level))
     bad = Company(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + ".md", [], score, True, False, signature, isLast)
+            "bad" + story_type  + "Quest" + str(start_id) + ".md", [],
+                  score, True, False, signature, isLast, level)
     bad.content = init.content
     bad.keywords = init.keywords
     timeOut = Company(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [], score, False, True, signature, isLast)
+            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [],
+                      score, False, True, signature, isLast, level)
     questList.append(init)
     questList.append(bad)
     questList.append(timeOut)
 
-    bad.generateEmail(CompanyModel('gmail.com', fake))
-    timeOut.generateEmail(CompanyModel('gmail.com', fake))
+    bad.generateEmail(CompanyModel('gmail.com', fake, level))
+    timeOut.generateEmail(CompanyModel('gmail.com', fake, level))
     
     # Create Fake Data
     for i in range(0, random.randint(1, 3)):
-        CompanyModel('gmail.com', fake)
+        CompanyModel('gmail.com', fake, level)
 
     return questList
