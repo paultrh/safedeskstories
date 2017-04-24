@@ -19,7 +19,6 @@ class Linker():
     def populate(self, is_good):
         if (is_good):
             if (self.linkId == None):
-                print('CASEEEEEEEEE')
                 self.serialize = OrderedDict([
                     ('keywords', []),
                     ('link', self.linkId),
@@ -132,12 +131,10 @@ class Quest():
         
     def toJSON(self):
         serialize = OrderedDict([
-            #('current_id', str(self.current_id)),
             ('name', str(self.level) + str(self.current_id)),
             ('sender', self.sender),
             ('subject', self.subject),
             ('content', self.body[:-3]),
-            #('keywords', tuple(self.keywords)),
             ('good', self.good),
             ('bad', self.bad),
             ('timeout', self.timeOut),

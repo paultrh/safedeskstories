@@ -152,12 +152,6 @@ for subdir, dirs, files in os.walk(rootdir):
     for folder in dirs:
         sub_folders.append(folder)
 
-folders_ran = copy.deepcopy(sub_folders)
-
-while (len(folders_ran) < nb_iteration):
-    folders_ran.append(random.choice(sub_folders))
-
-random.shuffle(folders_ran)
 points_credit = []
 for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
@@ -165,8 +159,10 @@ for i in range(0, nb_iteration):
 scenario = ['contact', 'company']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 level = "out"
+
 if not os.path.exists(level):
         os.makedirs(level)
+        
 for i in range(1, 3):
     toplevel = "out/" + str(i)
     local = random.choice(contries)
