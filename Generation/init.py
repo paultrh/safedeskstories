@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # BASICS
 import os
 import copy
