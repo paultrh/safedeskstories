@@ -8,36 +8,54 @@ class Linker():
     serialize = {}
     islast = 0
     level = 0
-    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
+    keywords = []
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords):
         self.islast = islast
         self.score = score
         self.linkId = linkId
         self.level = level
+        self.keywords = keywords
         
-    def populate(self):
-        if (self.linkId == None):
-            self.serialize = OrderedDict([
-                ('link', self.linkId),
-                ('score', self.score),
-              ])
+    def populate(self, is_good):
+        if (is_good):
+            if (self.linkId == None):
+                print('CASEEEEEEEEE')
+                self.serialize = OrderedDict([
+                    ('keywords', []),
+                    ('link', self.linkId),
+                    ('score', self.score),
+                  ])
+            else:
+                self.linkId = self.level + str(self.linkId)
+                self.serialize = OrderedDict([
+                    ('keywords', self.keywords),
+                    ('link', self.linkId),
+                    ('score', self.score),
+                  ])
         else:
-            self.linkId = self.level + str(self.linkId)
-            self.serialize = OrderedDict([
-                ('link', self.linkId),
-                ('score', self.score),
-              ])
+            if (self.linkId == None):
+                self.serialize = OrderedDict([
+                    ('link', self.linkId),
+                    ('score', self.score),
+                  ])
+            else:
+                self.linkId = self.level + str(self.linkId)
+                self.serialize = OrderedDict([
+                    ('link', self.linkId),
+                    ('score', self.score),
+                  ])
 
 class Good(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
-        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level)
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords):
+        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords)
         self.linkId = linkId + 3
-        if (islast):
+        if (islast or is_timeout):
             self.linkId = None
-        self.populate()
+        self.populate(True)
         
 class Bad(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
-        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level)
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords):
+        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords)
         if is_bad:
             self.linkId = linkId + 2
         elif is_timeout:
@@ -45,17 +63,17 @@ class Bad(Linker):
         else:
             self.linkId = linkId + 1
         self.score = -score;
-        self.populate()
+        self.populate(False)
 
 class TimeOut(Linker):
-    def __init__(self, score, linkId, is_bad, is_timeout, islast, level):
-        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level)
+    def __init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords):
+        Linker.__init__(self, score, linkId, is_bad, is_timeout, islast, level, keywords)
         if is_timeout:
             self.linkId = None
         else:
             self.linkId = linkId + 2
         self.score = -score;
-        self.populate()
+        self.populate(False)
         
 
 class Quest():
@@ -75,6 +93,7 @@ class Quest():
     timeOut = None
     content = None
     signature = ""
+    islast = False
     
     def __init__(self, start_id, current_id, story_name, sender,
                  subject, body, keywords, score, is_bad, is_timeout, signature, islast, level):
@@ -89,15 +108,15 @@ class Quest():
         self.score = score
         self.is_bad = is_bad
         self.is_timeout = is_timeout
-        if is_timeout:
-            self.good = TimeOut(score, start_id, is_bad, is_timeout, islast, level).serialize
-        else:
-            self.good = Good(score, start_id, is_bad, is_timeout, islast, level).serialize
-        self.bad = Bad(score, start_id, is_bad, is_timeout, islast, level).serialize
-        self.timeOut = TimeOut(score, start_id, is_bad, is_timeout, islast, level).serialize
-
+        self.islast = islast
         self.content = 0
         self.signature = signature
+
+    def generateInitFile(self):
+        self.good = Good(self.score, self.start_id, self.is_bad, self.is_timeout, self.islast, self.level, self.keywords).serialize
+        self.bad = Bad(self.score, self.start_id, self.is_bad, self.is_timeout, self.islast, self.level, self.keywords).serialize
+        self.timeOut = TimeOut(self.score, self.start_id, self.is_bad, self.is_timeout, self.islast, self.level, self.keywords).serialize
+
 
     def timeOutBody(self):
         txt = ""
@@ -107,6 +126,10 @@ class Quest():
         return txt
 
 
+    def setKeywords(self, keywords):
+        self.keywords = keywords
+
+        
     def toJSON(self):
         serialize = OrderedDict([
             #('current_id', str(self.current_id)),
@@ -114,7 +137,7 @@ class Quest():
             ('sender', self.sender),
             ('subject', self.subject),
             ('content', self.body[:-3]),
-            ('keywords', tuple(self.keywords)),
+            #('keywords', tuple(self.keywords)),
             ('good', self.good),
             ('bad', self.bad),
             ('timeout', self.timeOut),

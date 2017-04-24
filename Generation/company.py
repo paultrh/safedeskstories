@@ -249,16 +249,16 @@ def generateCompany(start_id, sender, score, is_last, story_name, signature, fak
     # Create Specific Content
     questList = []
     init = Company(start_id, start_id, story_name, sender, init_subject,
-            "init" + story_type  + "Quest" + str(start_id) + ".md", [],
+            "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
                    score, False, False, signature, isLast, level)
     init.generateEmail(CompanyModel('gmail.com', fake, level))
     bad = Company(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + ".md", [],
+            "bad" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
                   score, True, False, signature, isLast, level)
     bad.content = init.content
-    bad.keywords = init.keywords
+    bad.setKeywords(init.keywords)
     timeOut = Company(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + ".md", [],
+            "timeOut" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
                       score, False, True, signature, isLast, level)
     questList.append(init)
     questList.append(bad)
@@ -266,6 +266,10 @@ def generateCompany(start_id, sender, score, is_last, story_name, signature, fak
 
     bad.generateEmail(CompanyModel('gmail.com', fake, level))
     timeOut.generateEmail(CompanyModel('gmail.com', fake, level))
+
+    init.generateInitFile()
+    bad.generateInitFile()
+    timeOut.generateInitFile()
     
     # Create Fake Data
     for i in range(0, random.randint(1, 3)):

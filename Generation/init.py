@@ -163,34 +163,34 @@ for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
 scenario = ['contact', 'company']
-
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 level = "out"
 if not os.path.exists(level):
         os.makedirs(level)
 for i in range(1, 3):
-    level = "out/" + str(i)
+    toplevel = "out/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
+    for y in range(0, 3):
+        level = toplevel + '/story'+str(i)+str(y)
+        quests = []
+        idcount = 1
+        maxi = 4
+        for z in range(1, maxi):
+            destiny = random.choice(scenario)
+            isLast = False
+            if (i == maxi - 1):
+                isLast = True
+            if (destiny == 'contact'):
+                quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
+            elif (destiny == 'company'):
+                quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
+            idcount += 3
 
-    quests = []
-    idcount = 1
-    maxi = 4
-    for i in range(1, maxi):
-        destiny = random.choice(scenario)
-        isLast = False
-        if (i == maxi - 1):
-            isLast = True
-        if (destiny == 'contact'):
-            quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
-        elif (destiny == 'company'):
-            quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
-        idcount += 3
+        story = Story(quests)
 
-    story = Story(quests)
-
-    if not os.path.exists(level):
-        os.makedirs(level)
-    with open(os.path.join(level, 'init.json'), "w") as myfile:
-        myfile.write(story.toJSON())
+        if not os.path.exists(level):
+            os.makedirs(level)
+        with open(os.path.join(level, 'init.json'), "w") as myfile:
+            myfile.write(story.toJSON())
 
