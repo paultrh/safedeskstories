@@ -90,6 +90,14 @@ with open("user.txt", "r") as myfile:
 sender = random.choice(senders)
 signature = generateSignature()
 
+
+class Level:
+    name = ""
+    required_score = 0
+    def __init__(self, name, required_score):
+        self.name = name
+        self.required_score = required_score
+
 class Story():
     quests = []
     def __init__(self, quests):
@@ -139,7 +147,11 @@ class Story():
         except:
             print("no dot render found go to http://www.webgraphviz.com/")
         
-        
+def generateLevelJSON(levels):
+    var = json.dumps(levels, default=lambda o: o.__dict__, 
+            sort_keys=False, indent=4)
+    with open(os.path.join('out/Levels.json'), "w") as myfile:
+            myfile.write(var)
         
 idCount = 1
 total_points = 100
@@ -158,17 +170,14 @@ for i in range(0, nb_iteration):
 
 scenario = ['contact', 'company']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
-level = "out"
-
-if not os.path.exists(level):
-        os.makedirs(level)
+levels = []
         
 for i in range(1, 3):
-    toplevel = "out/" + str(i)
+    toplevel = "out/stories/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
     for y in range(0, 3):
-        level = toplevel + '/story'+str(i)+str(y)
+        level = toplevel + '/' + str(y + 1)
         quests = []
         idcount = 1
         maxi = 4
@@ -185,8 +194,12 @@ for i in range(1, 3):
 
         story = Story(quests)
 
+        
         if not os.path.exists(level):
             os.makedirs(level)
         with open(os.path.join(level, 'init.json'), "w") as myfile:
             myfile.write(story.toJSON())
+    levels.append(Level(str(i), i*10))
 
+
+generateLevelJSON(levels)
