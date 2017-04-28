@@ -20,7 +20,7 @@ class Linker():
         if (is_good):
             if (self.linkId == None):
                 self.serialize = OrderedDict([
-                    ('keywords', []),
+                    ('keywords', self.keywords),
                     ('link', self.linkId),
                     ('score', self.score),
                   ])
