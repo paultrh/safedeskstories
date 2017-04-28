@@ -17,6 +17,11 @@ def Usage():
     print("python [Folder To Generate Graph] [Output]")
     print("if no args then the script generate DATA")
 
+##################################
+if not os.path.exists('filesystem'):
+            os.makedirs('filesystem')
+##################################
+
 #CMD HANDLER
 print(len(sys.argv))
 if (len(sys.argv) > 3):

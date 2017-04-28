@@ -55,6 +55,7 @@ class User():
             myfile.write(var)
             
     def WriteToFile(self, filename):
+        filenameOrigin = filename
         people = ""
         people += "### " + self.name + os.linesep
         people += "Phone number: " + self.phone_number + os.linesep
@@ -71,6 +72,12 @@ class User():
         with open(os.path.join(filename +'.md'), "a+") as myfile:
             myfile.write(people)
         self.generateJSONforFile(filename, ".txt")
+        ################ TMP for soutenance only ###################
+        tmp = (self.level.split('/')[2] + self.level.split('/')[3])
+        with open(os.path.join('filesystem/'+tmp+filenameOrigin +'.md'), "a+") as myfile:
+            myfile.write(people)
+        self.generateJSONforFile('filesystem/'+tmp+filenameOrigin, ".txt")
+        ##########################################################
 
     
 
