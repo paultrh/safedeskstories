@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # BASICS
 import os
@@ -170,7 +170,7 @@ points_credit = []
 for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
-scenario = ['contact', 'company']
+scenario = ['contact']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
         
