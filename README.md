@@ -13,6 +13,11 @@ Stories generation
 $ pip install faker
 $ pip install graphviz
 ```
+or
+```sh
+$ pip install -r requirements.txt
+```
+
 
 ## Usage
 
