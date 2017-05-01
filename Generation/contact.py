@@ -48,8 +48,8 @@ class User():
     def generateJSONforFile(self, name, ext):
         var = ""
         var = var + "{" + '\n'
-        var = var + '"filename": "'+os.path.basename(name)+'",' + '\n'
-        var = var + '"extension": "'+ext+'"' + '\n'
+        var = var + '"  filename": "'+os.path.basename(name)+'",' + '\n'
+        var = var + '"  extension": "'+ext+'"' + '\n'
         var = var + "}"
         with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
@@ -71,12 +71,12 @@ class User():
             os.makedirs(folder)
         with open(os.path.join(filename +'.md'), "a+") as myfile:
             myfile.write(people)
-        self.generateJSONforFile(filename, ".txt")
+        self.generateJSONforFile(filename, "txt")
         ################ TMP for soutenance only ###################
         tmp = (self.level.split('/')[2] + self.level.split('/')[3])
         with open(os.path.join('filesystem/'+tmp+filenameOrigin +'.md'), "a+") as myfile:
             myfile.write(people)
-        self.generateJSONforFile('filesystem/'+tmp+filenameOrigin, ".txt")
+        self.generateJSONforFile('filesystem/'+tmp+filenameOrigin, "txt")
         ##########################################################
 
     
