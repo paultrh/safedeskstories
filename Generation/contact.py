@@ -48,8 +48,8 @@ class User():
     def generateJSONforFile(self, name, ext):
         var = ""
         var = var + "{" + '\n'
-        var = var + '"  filename": "'+os.path.basename(name)+'",' + '\n'
-        var = var + '"  extension": "'+ext+'"' + '\n'
+        var = var + '  "filename": "'+os.path.basename(name)+'",' + '\n'
+        var = var + '  "extension": "'+ext+'"' + '\n'
         var = var + "}"
         with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
