@@ -101,6 +101,7 @@ class CompanyModel():
             myfile.write(var)
             
     def WriteToFile(self, filename):
+        filenameOrigin = filename.replace(" ", "")
         company = ""
         company += "# " + self.company +" Company"+ '\n\n\n'
         company += "### Description" + '\n\n' + self.description0 + '\n' + self.description1 + '\n\n'
@@ -138,12 +139,13 @@ class CompanyModel():
         company += "The overall satisfaction rate is " + random.choice(quali)+ " **" + self.satisfaction_rate + '%** \n'
         folder = (self.level + '/doc/'+self.company).replace(" ", "")
         filename = (self.level + '/doc/'+self.company + '/' + filename).replace(" ", "")
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        with open(os.path.join(filename+'.md'), "w+") as myfile:
-            myfile.write(company)
 
-        self.generateJSONforFile(filename, ".docx")
+        if not os.path.exists('filesystem/partners'):
+            os.makedirs('filesystem/partners')
+        tmp = (self.level.split('/')[2] + self.level.split('/')[3])
+        with open(os.path.join('filesystem/partners/'+tmp+filenameOrigin +'.md'), "a+") as myfile:
+            myfile.write(company)
+        self.generateJSONforFile('filesystem/partners/'+tmp+filenameOrigin, "txt")
 
 
 #### QUEST GENERATION ####        
@@ -177,15 +179,7 @@ class Company(Quest):
                      'number of employees' : company.nbEmployee ,
                      'satisfaction rate' : company.satisfaction_rate ,
                      'domain name' : company.domain ,
-                     'url' : company.url ,
-                     'md5 token' : company.md5 ,
-                     'standart mac processor ' : company.mac_processor ,
-                     'standart firefox signature' : company.firefox ,
-                     'linux platform token' : company.linux_platform_token ,
-                     'opera specification' : company.opera ,
-                     'windows platform token' : company.windows_platform_token ,
-                     'default user agent' : company.user_agent ,
-                     'specific chrome agent' : company.chrome_agent
+                     'url' : company.url
                      }
         txt = ""
         txt += "I am looking for : "

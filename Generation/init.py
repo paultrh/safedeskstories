@@ -17,10 +17,8 @@ def Usage():
     print("python [Folder To Generate Graph] [Output]")
     print("if no args then the script generate DATA")
 
-##################################
 if not os.path.exists('filesystem'):
             os.makedirs('filesystem')
-##################################
 
 #CMD HANDLER
 print(len(sys.argv))
@@ -175,7 +173,7 @@ points_credit = []
 for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
-scenario = ['contact']
+scenario = ['contact', 'company']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
         
@@ -200,7 +198,6 @@ for i in range(1, 3):
             idcount += 3
 
         story = Story(quests)
-
         
         if not os.path.exists(level):
             os.makedirs(level)

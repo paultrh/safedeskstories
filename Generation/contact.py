@@ -67,17 +67,14 @@ class User():
         people += "Last connection: "  + self.last_connection  + os.linesep + os.linesep
         folder = (self.level + '/doc/' + self.companyName).replace(" ", "")
         filename = (self.level + '/doc/' + self.companyName + '/' + filename).replace(" ", "")
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        with open(os.path.join(filename +'.md'), "a+") as myfile:
-            myfile.write(people)
-        self.generateJSONforFile(filename, "txt")
-        ################ TMP for soutenance only ###################
+
+        if not os.path.exists('filesystem/secugov'):
+            os.makedirs('filesystem/secugov')
         tmp = (self.level.split('/')[2] + self.level.split('/')[3])
-        with open(os.path.join('filesystem/'+tmp+filenameOrigin +'.md'), "a+") as myfile:
+        with open(os.path.join('filesystem/secugov/'+tmp+filenameOrigin +'.md'), "a+") as myfile:
             myfile.write(people)
-        self.generateJSONforFile('filesystem/'+tmp+filenameOrigin, "txt")
-        ##########################################################
+        self.generateJSONforFile('filesystem/secugov/'+tmp+filenameOrigin, "txt")
+
 
     
 
