@@ -8,77 +8,79 @@ from graphviz import Digraph
 from collections import namedtuple
 import json
 import sys
+from subprocess import check_call
 
 # CUSTOM
 from contact import *
 from company import *
 
-def Usage():
-    print("python [Folder To Generate Graph] [Output]")
-    print("if no args then the script generate DATA")
-
 if not os.path.exists('filesystem'):
             os.makedirs('filesystem')
 
 #CMD HANDLER
-print(len(sys.argv))
-if (len(sys.argv) > 3):
-    Usage()
-if (len(sys.argv) > 1  and len(sys.argv) < 4):
-    dot = Digraph(comment='The story')
-    if not os.path.exists(sys.argv[2]):
-            os.makedirs(sys.argv[2])
-    with open(sys.argv[1] + '/init.json') as data_file:
-        story = json.loads(data_file.read(), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+def generateGraphFile():
+    detail = False
+    node_number = 0
+    dot = Digraph(comment='The story', format='png')
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if (file == "init.json"):
+                with open(os.path.join(root, file)) as data_file:
+                    story = json.loads(data_file.read(), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+                    tmpGlobal = []
+                    tmp = []
+                    count = 1
+                    for x in story:
+                        tmp.append(x)
+                        if (count % 3 == 0):
+                            tmpGlobal.append(tuple(tmp))
+                            tmp =  []
+                        count += 1
 
-        tmpGlobal = []
-        tmp = []
-        count = 1
-        for x in story:
-            tmp.append(x)
-            if (count % 3 == 0):
-                tmpGlobal.append(tuple(tmp))
-                tmp =  []
-            count += 1
+                    last_good = 0
+                    last_bad = 0
+                    dot.node("level " + root.split("stories")[1][1:][0], "level " +  root.split("stories")[1][1:][0])
+                    for quest in tmpGlobal:
+                        contentInit = ""
+                        contentBad = ""
+                        contentTimeOut = ""
+                        with open(os.path.join(root, quest[0].content) + '.md') as data_file:
+                            contentInit = [x.rstrip() for x in data_file.read().splitlines()]
+                        with open(os.path.join(root, quest[1].content) + '.md') as data_file:
+                            contentBad = data_file.read()
+                        with open(os.path.join(root, quest[2].content) + '.md') as data_file:
+                            contentTimeOut = data_file.read()
+                        if (detail):
+                            dot.node(str(quest[0].name), ''.join(contentInit).replace("\n", ""))
+                            dot.node(str(quest[1].name), ''.join(contentBad).replace("\n", ""))
+                            dot.node(str(quest[2].name), ''.join(contentTimeOut).replace("\n", ""), style='filled', fillcolor='red')
+                        else:
+                            dot.node(str(quest[0].name), str(quest[0].name))
+                            dot.node(str(quest[1].name), str(quest[1].name))
+                            dot.node(str(quest[2].name), str(quest[2].name), style='filled', fillcolor='red')
 
-        last_good = 0
-        last_bad = 0
-        for quest in tmpGlobal:
-            print(quest)
-            contentInit = ""
-            contentBad = ""
-            contentTimeOut = ""
-            with open(sys.argv[1] + '/' + quest[0].content + '.md') as data_file:
-                contentInit = data_file.read()
-            with open(sys.argv[1] + '/' + quest[1].content + '.md') as data_file:
-                contentBad = data_file.read()
-            with open(sys.argv[1] + '/' + quest[2].content + '.md') as data_file:
-                contentTimeOut = data_file.read()
-            dot.node(str(quest[0].name), contentInit.replace('\n', "\\n"))
-            dot.node(str(quest[1].name), contentBad.replace('\n', "\\n"))
-            dot.node(str(quest[2].name), contentTimeOut.replace('\n', "\\n"), style='filled', fillcolor='red')
+                        if (quest == tmpGlobal[0]):
+                            dot.edge("level " + root.split("stories")[1][1:][0], str(quest[0].name));
 
-                
-            dot.edge(str(quest[0].name),str(quest[1].name), color='orange')
-            dot.edge(str(quest[0].name),str(quest[2].name), color='red')
-            dot.edge(str(quest[1].name),str(quest[2].name), color='red')
-            if (last_good != 0 and last_bad != 0):
-                dot.edge(last_good,str(quest[0].name), color='green')
-                dot.edge(last_bad,str(quest[0].name), color='green')
-            last_good = str(quest[0].name)
-            last_bad = str(quest[1].name)
-                
-        dot.node("END", style='filled', fillcolor='green')
-        dot.edge(last_good,"END", color='green')
-        dot.edge(last_bad,"END", color='green')
-        try:
-            dot.render(sys.argv[2] + '/graph.gv', view=True)
-        except:
-            print("no dot render found go to http://www.webgraphviz.com/")
-            
-    exit()
-    
-    
+                        dot.edge(str(quest[0].name),str(quest[1].name), color='orange', label=str(quest[0].bad.score))
+                        dot.edge(str(quest[0].name),str(quest[2].name), color='red', label=str(quest[0].timeout.score))
+                        dot.edge(str(quest[1].name),str(quest[2].name), color='red', label=str(quest[0].timeout.score))
+                        if (last_good != 0 and last_bad != 0):
+                            dot.edge(last_good,str(quest[0].name), color='green', label=str(quest[0].good.score))
+                            dot.edge(last_bad,str(quest[0].name), color='green', label=str(quest[0].good.score))
+                        last_good = str(quest[0].name)
+                        last_bad = str(quest[1].name)
+                                
+                    dot.node("END"+str(node_number), style='filled', fillcolor='green')
+                    dot.edge(last_good,"END"+str(node_number), color='green')
+                    dot.edge(last_bad,"END"+str(node_number), color='green')
+                    node_number = node_number + 1
+                    try:
+                        dot.render('graph.gv', view=True)
+                    except:
+                        pass
+                    
+                    
 
 # Generate signature for the whole story
 def generateSignature():
@@ -181,6 +183,7 @@ for i in range(1, 3):
     toplevel = "out/stories/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
+    sender = random.choice(senders)
     for y in range(0, 3):
         level = toplevel + '/' + str(y + 1)
         quests = []
@@ -207,3 +210,4 @@ for i in range(1, 3):
 
 
 generateLevelJSON(levels)
+generateGraphFile()
