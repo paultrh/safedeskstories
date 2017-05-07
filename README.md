@@ -24,8 +24,8 @@ $ pip install -r requirements.txt
 Usefull command
 
 ```sh
-$ python3 [script.py]
-$ python3 init.py [FolderToAnalyse] [Output]
+$ python3 init.py
+$ python3 relaunch.py
 ```
 
 ## TODO
@@ -35,3 +35,4 @@ $ python3 init.py [FolderToAnalyse] [Output]
 - Verify stories dependance
 - Add image in generation
 - Generate quest that will generate stories with from a complexity indicator
+- Generation from csv file
