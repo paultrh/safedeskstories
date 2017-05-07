@@ -2,6 +2,3 @@ Dear
 Hello
 Good morning
 Good afternoon
-Hi
-Hey
-To whom it may concern

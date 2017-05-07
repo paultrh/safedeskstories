@@ -8,10 +8,13 @@ if not os.path.exists('relaunch'):
 
 body = []
 with open("relaunch.txt", "r") as myfile:
-        body = myfile.read()
-        body = body.split('-')
-
-
+        tmp = myfile.read()
+        res = tmp.split('-')
+        for elt in res:
+                if elt[0] == '\n':
+                        elt = elt[1:]
+                body.append(elt)
+        
 def signature():
         txt = ''
         txt += '{{ signature }}'
