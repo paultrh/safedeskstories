@@ -146,7 +146,6 @@ class Contact(Quest):
         self.content = txt
         with open(os.path.join(self.level, self.body), "w") as myfile:
             myfile.write(txt)
-        
         return txt
 
 # NOTE : Should refactor but may divert from one quest to another
