@@ -90,12 +90,13 @@ class CompanyModel():
 
         self.WriteToFile(self.company + 'Description');
 
+
      # TODO no more hardcode
     def generateJSONforFile(self, name, ext):
         var = ""
         var = var + "{" + '\n'
-        var = var + '"filename": "'+os.path.basename(name)+'",' + '\n'
-        var = var + '"extension": "'+ext+'"' + '\n'
+        var = var + '  "filename": "'+os.path.basename(name)+'",' + '\n'
+        var = var + '  "extension": "'+ext+'"' + '\n'
         var = var + "}"
         with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
@@ -211,7 +212,7 @@ class Company(Quest):
 
     def generateEmail(self, company):
         txt = ""
-        with open("welcomePhrase.txt", "r") as myfile:
+        with open("config/welcomePhrase.txt", "r") as myfile:
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep
@@ -223,7 +224,7 @@ class Company(Quest):
         else:
             txt += self.timeOutBody() + os.linesep + os.linesep
         
-        with open("EndPhrase.txt", "r") as myfile:
+        with open("config/EndPhrase.txt", "r") as myfile:
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep

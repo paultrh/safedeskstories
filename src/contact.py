@@ -124,7 +124,7 @@ class Contact(Quest):
 
     def generateEmail(self, user):
         txt = ""
-        with open("welcomePhrase.txt", "r") as myfile:
+        with open("config/welcomePhrase.txt", "r") as myfile:
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep
@@ -136,7 +136,7 @@ class Contact(Quest):
         else:
             txt += self.timeOutBody() + os.linesep + os.linesep
         
-        with open("EndPhrase.txt", "r") as myfile:
+        with open("config/EndPhrase.txt", "r") as myfile:
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep

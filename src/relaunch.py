@@ -7,7 +7,7 @@ if not os.path.exists('relaunch'):
         os.makedirs('relaunch')
 
 body = []
-with open("relaunch.txt", "r") as myfile:
+with open("config/relaunch.txt", "r") as myfile:
         tmp = myfile.read()
         res = tmp.split('-')
         for elt in res:
@@ -22,14 +22,14 @@ def signature():
         
 def generateEmail(index):
         txt = ""
-        with open("welcomePhrase.txt", "r") as myfile:
+        with open("config/welcomePhrase.txt", "r") as myfile:
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep
 
         txt += body[i] + os.linesep + os.linesep
         
-        with open("EndPhrase.txt", "r") as myfile:
+        with open("config/EndPhrase.txt", "r") as myfile:
             content = myfile.readlines()
             content = [x.strip() for x in content]
             txt += random.choice(content) + "," + os.linesep + os.linesep

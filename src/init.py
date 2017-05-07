@@ -90,7 +90,7 @@ def generateSignature():
     return txt
 
 # Load possible senders
-with open("user.txt", "r") as myfile:
+with open("config/user.txt", "r") as myfile:
     content = myfile.read()
     senders = json.loads(content)
 
