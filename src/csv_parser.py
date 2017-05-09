@@ -5,22 +5,23 @@ import os
 from csv import DictReader
 
 
-def isUnique(myList):
+def isUnique(myList, show):
   mySet = set()
   for x in myList:
+    if (show):
+      print('-'+x+'-')
+    if not x:
+      continue
     if x in mySet:
+        if (show):
+          print("is a doublon ->"+x+"|") #Expose doublons if in debug configuration
+          print(len(x))
         return False
     mySet.add(x)
   return True
 
-# TMP USE FOR TESTING
-with open('plop.csv', 'w+') as csvfile:
-    spamwriter = csv.writer(csvfile, delimiter=',',
-                            quoting=csv.QUOTE_MINIMAL)
-    spamwriter.writerow(['Name', 'Firstname', 'Age'])
-    spamwriter.writerow(['doe', 'john', '21'])
-    spamwriter.writerow(['doe2', 'john2', '22'])
-    spamwriter.writerow(['doe3', 'john3', '21'])
+
+#### DOCUMENT GENERATION ####
 
 class Entity(object):
     def __init__(self, pairs):
@@ -32,26 +33,100 @@ class Entity(object):
             txt += k + '=' + v + ' '
         return txt
 
-with open('plop.csv') as f:
+    # TODO no more hardcode
+    def generateJSONforFile(self, name, ext):
+        var = ""
+        var = var + "{" + '\n'
+        var = var + '  "filename": "'+os.path.basename(name)+'",' + '\n'
+        var = var + '  "extension": "'+ext+'"' + '\n'
+        var = var + "}"
+        with open(os.path.join(name + ".json"), "w") as myfile:
+            myfile.write(var)
+            
+    def WriteToFile(self, filename):
+        pass
+
+
+
+#### QUEST GENERATION ####        
+                
+class Story():
+    
+    def __init__():
+      pass
+
+    def questionBody(self, user):
+        pass
+      
+    def badBody(self, user):
+        pass
+      
+    def generateEmail(self, user):
+        pass
+
+
+
+def AnalyseDataSet(filename):
+  print("------- ANALYSE "+filename+" ----------")
+  with open(filename, encoding="utf8") as f:
     orders = []
-    reader = DictReader(f)
+    reader = DictReader(f, delimiter=',')
     for row in reader:
-        orders.append(Entity(row.items()))
+      if not row:
+        continue
+      orders.append(Entity(row.items()))
+      
 
-attrs = []
-for k,v in orders[0].__dict__.items():
-    attrs.append(k)
+  attrs = []
+  for k,v in orders[0].__dict__.items():
+      attrs.append(k)
 
-tmp = []
-uniqueElt = []
-for i in range(0, len(attrs)):
-    for elt in orders:
-        val = [o[1] for o in elt.__dict__.items() if o[0] == attrs[i]]
-        tmp.append(''.join(val))
-    if (isUnique(tmp)):
-        uniqueElt.append(attrs[i])
-    tmp = []
+  print(str(len(orders)) + " objects created of " + str(len(attrs)) + " attributes")
+  tmp = []
+  uniqueElt = []
+  for i in range(0, len(attrs)):
+      for elt in orders:
+          val = [o[1] for o in elt.__dict__.items() if o[0] == attrs[i]]
+          if not val:
+            continue
+          if (val != None and val != " " and val != '' and len(val) != 0 and val):
+            tmp.append(''.join(val))
+      if (attrs[i] == "custom column name"):   #Use for debug
+        if (isUnique(tmp, True)):
+            uniqueElt.append(attrs[i])
+      else:
+        if (isUnique(tmp, False)):
+            uniqueElt.append(attrs[i])
+      tmp = []
 
-print("Unique element are")
-print(uniqueElt)
+  NotuniqueElt = [x for x in attrs if x not in uniqueElt]
+  print("Unique element are")
+  print(uniqueElt)
+  print("Non unique element are")
+  print(NotuniqueElt)
+
+for subdir, dirs, files in os.walk('inputs'):
+    for file in files:
+        filepath = subdir + os.sep + file
+        if filepath.endswith(".csv"):
+            AnalyseDataSet(filepath)
+        else:
+          print(str(filepath) + " is ignored invalid format")
+
+#TODO
+print("------- GENERATING STORIES ----------")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

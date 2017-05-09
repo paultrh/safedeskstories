@@ -26,7 +26,14 @@ Usefull command
 ```sh
 $ python3 init.py
 $ python3 relaunch.py
+$ python3 csv_parser.py
 ```
+
+## Information
+
+### csv_parser
+The script parse all the csv file under the inputs directory and analyse.
+If their are suitable to generate stories they will be integrated to the scenario.
 
 ## TODO
 
