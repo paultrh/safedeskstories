@@ -13,6 +13,7 @@ from subprocess import check_call
 # CUSTOM
 from contact import *
 from company import *
+from csv_parser import *
 
 if not os.path.exists('filesystem'):
             os.makedirs('filesystem')
@@ -51,9 +52,9 @@ def generateGraphFile():
                         with open(os.path.join(root, quest[2].content) + '.md') as data_file:
                             contentTimeOut = data_file.read()
                         if (detail):
-                            dot.node(str(quest[0].name), ''.join(contentInit).replace("\n", ""))
-                            dot.node(str(quest[1].name), ''.join(contentBad).replace("\n", ""))
-                            dot.node(str(quest[2].name), ''.join(contentTimeOut).replace("\n", ""), style='filled', fillcolor='red')
+                            dot.node(str(quest[0].name), ''.join(contentInit).replace("\n", "\\n"))
+                            dot.node(str(quest[1].name), ''.join(contentBad).replace("\n", "\\n"))
+                            dot.node(str(quest[2].name), ''.join(contentTimeOut).replace("\n", "\\n"), style='filled', fillcolor='red')
                         else:
                             dot.node(str(quest[0].name), str(quest[0].name))
                             dot.node(str(quest[1].name), str(quest[1].name))
@@ -175,11 +176,10 @@ points_credit = []
 for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
-scenario = ['contact', 'company']
+scenario = ['contact', 'company', 'csv_parser']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
-        
-for i in range(1, 3):
+for i in range(1, 5):
     toplevel = "out/stories/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
@@ -188,17 +188,22 @@ for i in range(1, 3):
         level = toplevel + '/' + str(y + 1)
         quests = []
         idcount = 1
-        maxi = 4
+        maxi = 3
         for z in range(1, maxi):
             destiny = random.choice(scenario)
+            print(destiny, end='')
             isLast = False
             if (z == maxi - 1):
                 isLast = True
             if (destiny == 'contact'):
                 quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
             elif (destiny == 'company'):
-                quests += generateCompany(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
+                quests += generateCompany(idcount, sender['email'], 200, False, "plop", signature, fake, isLast, level)
+            elif (destiny == 'csv_parser'):
+                quests += generateCustom(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level)    
             idcount += 3
+            print(' Completed', end='')
+            print('')
 
         story = Story(quests)
         
