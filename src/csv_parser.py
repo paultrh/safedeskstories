@@ -36,12 +36,23 @@ def isUnique(myList, show):
 
 class EntitiyManager():
 
-  def __init__(self, listEntity, uniqueList, nonUniqueList, description):
+  def __init__(self, listEntity, uniqueList, nonUniqueList, description, level):
         self.listEntity = listEntity
         self.uniqueList = uniqueList
         self.nonUniqueList = nonUniqueList
         self.description = description
+        self.level = level
 
+  # TODO no more hardcode
+  def generateJSONforFile(self, name, ext):
+      var = ""
+      var = var + "{" + '\n'
+      var = var + '  "filename": "'+os.path.basename(name)+'",' + '\n'
+      var = var + '  "extension": "'+ext+'"' + '\n'
+      var = var + "}"
+      with open(os.path.join(name + ".json"), "w") as myfile:
+          myfile.write(var)
+  
   def WriteToFile(self, filename, items, file):
       content = ''
       content += '## ' + sanityzeData(file.split('.')[0]) + os.linesep + os.linesep
@@ -61,6 +72,11 @@ class EntitiyManager():
         for elt in obj.__dict__.items():
           content += sanityzeBytes(str(elt[1])) + ' | '
         content += os.linesep + '| '
+      if not os.path.exists('filesystem/'+file.split('.')[0]):
+            os.makedirs('filesystem/'+file.split('.')[0])
+      with open(os.path.join('filesystem/'+file.split('.')[0]+'/'+file[:-4] +'.md'), "wb") as myfile:
+        myfile.write(content.encode('utf8'))
+        self.generateJSONforFile('filesystem/'+file.split('.')[0]+'/'+file[:-4], "txt")
       with open(filename.split('.')[0] + '.md', "wb") as myfile:
             myfile.write(content.encode('utf8'))
   
@@ -141,7 +157,7 @@ class Custom(Quest):
             myfile.write(txt)
         return txt
 
-def AnalyseDataSet(filename, file):
+def AnalyseDataSet(filename, file, level):
   with open(filename, encoding="utf8") as f:
     orders = []
     reader = DictReader(f, delimiter=',')
@@ -178,7 +194,7 @@ def AnalyseDataSet(filename, file):
   if len(uniqueElt) < 1:
     return None
   
-  manager = EntitiyManager(orders,  uniqueElt, NotUniqueElt, file)
+  manager = EntitiyManager(orders,  uniqueElt, NotUniqueElt, file, level)
   manager.WriteToFile(filename, orders[0].__dict__.items(), sanityzeData(file))
   return manager
 
@@ -201,7 +217,7 @@ def generateCustom(start_id, sender, score, is_last, story_name, signature, fake
 
 
       val = random.choice(potentialStories)
-      manager = AnalyseDataSet(val[0], val[1])
+      manager = AnalyseDataSet(val[0], val[1], level)
       if not manager:
         continue
       print(' -> '+ val[0] +' -> ', end='')
