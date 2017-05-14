@@ -1,6 +1,9 @@
 from collections import OrderedDict
 import json
 import os
+import obfuscationAlgorythm
+from story import *
+from copy import deepcopy
 
 class Linker():
     linkId = 0
@@ -75,6 +78,45 @@ class TimeOut(Linker):
         self.populate(False)
         
 
+class Evil():
+    def __init__(self, quest):
+        self.quest = deepcopy(quest)
+        self.parentRoot = self.quest.level
+        self.quest.level = self.quest.level + '/' + 'fraud'
+        self.level = self.quest.level
+        self.quest.story_name = self.quest.story_name + '/' + 'fraud'
+
+    def createFraud(self):
+        self.alterateBodyContent()
+        self.modifySenderEmail()
+        self.quest.generateInitFile()
+        story = Story([self.quest])
+
+        return self
+
+    def toJSON(self):
+        return self.quest.toJSON()
+    
+    def alterateBodyContent(self):
+        res = ''
+        with open(os.path.join(self.parentRoot, self.quest.body), 'r') as file:
+            val = file.readlines()
+            val = [obfuscationAlgorythm.emailTransform(elt, 1) for elt in val]
+            res += ''.join(val)
+        self.quest.body = self.quest.body[:-3]+'Fraud.md'
+        if not os.path.exists(self.level):
+            os.makedirs(self.level)
+        with open(os.path.join(self.level, self.quest.body), "w") as myfile:
+            myfile.write(res)
+
+
+    def modifySenderEmail(self):
+        email = self.quest.sender
+        email = obfuscationAlgorythm.emailTransform(email, 1)
+        self.quest.sender = email
+
+        
+
 class Quest():
     level = 0
     start_id = 0
@@ -110,12 +152,16 @@ class Quest():
         self.islast = islast
         self.content = 0
         self.signature = signature
-
+        
     def generateInitFile(self):
+        self.evil = Evil(self)
         self.good = Good(self.score, self.start_id, self.is_bad, self.is_timeout, self.islast, self.level, self.keywords).serialize
         self.bad = Bad(self.score, self.start_id, self.is_bad, self.is_timeout, self.islast, self.level, self.keywords).serialize
         self.timeOut = TimeOut(self.score, self.start_id, self.is_bad, self.is_timeout, self.islast, self.level, self.keywords).serialize
-
+        self.evil.quest.good = self.good
+        self.evil.quest.bad = self.bad
+        self.evil.quest.timeOut = self.timeOut
+        
 
     def timeOutBody(self):
         txt = ""
@@ -123,7 +169,6 @@ class Quest():
         txt += "We lost money in process." + os.linesep
         txt += "I am disappointed." + os.linesep + os.linesep
         return txt
-
 
     def setKeywords(self, keywords):
         self.keywords = keywords

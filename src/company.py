@@ -265,9 +265,14 @@ def generateCompany(start_id, sender, score, is_last, story_name, signature, fak
     init.generateInitFile()
     bad.generateInitFile()
     timeOut.generateInitFile()
+
+    fraudList = []
+    fraudList.append(init.evil.createFraud())
+    fraudList.append(bad.evil.createFraud())
+    fraudList.append(timeOut.evil.createFraud())
     
     # Create Fake Data
     for i in range(0, random.randint(1, 3)):
         CompanyModel('gmail.com', fake, level)
 
-    return questList
+    return questList, fraudList

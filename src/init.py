@@ -14,6 +14,8 @@ from subprocess import check_call
 from contact import *
 from company import *
 from csv_parser import *
+from story import *
+from quest import *
 
 if not os.path.exists('filesystem'):
             os.makedirs('filesystem')
@@ -106,56 +108,10 @@ class Level:
         self.name = name
         self.required_score = required_score
 
-class Story():
-    quests = []
-    def __init__(self, quests):
-        self.quests = quests
 
-    def toJSON(self):
-        serialize = list((o.toJSON() for o in self.quests))
-
-        return json.dumps(serialize, default=lambda o: o.__dict__, 
-            sort_keys=False, indent=4)
-
-    #DUMB TEST
-    def ShowGraph(self):
-        tmpGlobal = []
-        tmp = []
-        count = 1
-        for i in self.quests:
-            tmp.append(i)
-            if (count % 3 == 0):
-                tmpGlobal.append(tuple(tmp))
-                tmp =  []
-            count += 1
-
-        last_good = 0
-        last_bad = 0
-        dot = Digraph(comment='The story')
-        for quest in tmpGlobal:
-            dot.node(str(quest[0].current_id), quest[0].content.replace(os.linesep, "\\n"))
-            dot.node(str(quest[1].current_id), quest[1].content.replace(os.linesep, "\\n"))
-            dot.node(str(quest[2].current_id), quest[2].content.replace(os.linesep, "\\n"), style='filled', fillcolor='red')
-
-            
-            dot.edge(str(quest[0].current_id),str(quest[1].current_id), color='orange')
-            dot.edge(str(quest[0].current_id),str(quest[2].current_id), color='red')
-            dot.edge(str(quest[1].current_id),str(quest[2].current_id), color='red')
-            if (last_good != 0 and last_bad != 0):
-                dot.edge(last_good,str(quest[0].current_id), color='green')
-                dot.edge(last_bad,str(quest[0].current_id), color='green')
-            last_good = str(quest[0].current_id)
-            last_bad = str(quest[1].current_id)
-            
-        dot.node("END", style='filled', fillcolor='green')
-        dot.edge(last_good,"END", color='green')
-        dot.edge(last_bad,"END", color='green')
-        try:
-            dot.render('graph.gv', view=True)
-        except:
-            print("no dot render found go to http://www.webgraphviz.com/")
-        
 def generateLevelJSON(levels):
+    if not os.path.exists('out'):
+        os.makedirs('out')
     var = json.dumps(levels, default=lambda o: o.__dict__, 
             sort_keys=False, indent=4)
     with open(os.path.join('out/Levels.json'), "w") as myfile:
@@ -179,21 +135,23 @@ for i in range(0, nb_iteration):
 scenario = ['contact', 'company', 'csv_parser']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
-for i in range(1, 5):
+nbLevels = 3
+nbSToryByLevel = 3
+nbQuestByStory = 5
+for i in range(1, nbLevels):
     toplevel = "out/stories/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
     sender = random.choice(senders)
-    for y in range(0, 3):
+    for y in range(0, nbSToryByLevel):
         level = toplevel + '/' + str(y + 1)
         quests = []
         idcount = 1
-        maxi = 3
-        for z in range(1, maxi):
+        for z in range(1, nbQuestByStory):
             destiny = random.choice(scenario)
-            print(destiny, end='')
+            print(destiny)
             isLast = False
-            if (z == maxi - 1):
+            if (z == nbQuestByStory - 1):
                 isLast = True
             if (destiny == 'contact'):
                 quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
@@ -202,15 +160,22 @@ for i in range(1, 5):
             elif (destiny == 'csv_parser'):
                 quests += generateCustom(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level)    
             idcount += 3
-            print(' Completed', end='')
-            print('')
+            print(' Completed')
 
-        story = Story(quests)
+        Legit = [elt for elt in quests if not isinstance(elt[0], Evil)]
+        flattenedLegit = [val for sublist in Legit for val in sublist]
+        notLegit = [elt for elt in quests if isinstance(elt[0], Evil)]
+        flattenednotLegit = [val for sublist in notLegit for val in sublist]
+        story = Story(flattenedLegit)
+        frauds = Story(flattenednotLegit)
         
         if not os.path.exists(level):
             os.makedirs(level)
         with open(os.path.join(level, 'init.json'), "w") as myfile:
             myfile.write(story.toJSON())
+        with open(os.path.join(os.path.join(level, 'fraud'), 'init.json'), "w") as myfile:
+            myfile.write(frauds.toJSON())
+
     levels.append(Level(str(i), i*10))
 
 

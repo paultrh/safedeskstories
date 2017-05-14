@@ -246,7 +246,12 @@ def generateCustom(start_id, sender, score, is_last, story_name, signature, fake
       bad.generateInitFile()
       timeOut.generateInitFile()
 
-    return questList
+      fraudList = []
+      fraudList.append(init.evil.createFraud())
+      fraudList.append(bad.evil.createFraud())
+      fraudList.append(timeOut.evil.createFraud())
+
+    return questList, fraudList
 
 
 

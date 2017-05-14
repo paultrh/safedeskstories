@@ -181,8 +181,15 @@ def generateContact(start_id, sender, score, is_last, story_name, signature, fak
     bad.generateInitFile()
     timeOut.generateInitFile()
 
+    fraudList = []
+    fraudList.append(init.evil.createFraud())
+    fraudList.append(bad.evil.createFraud())
+    fraudList.append(timeOut.evil.createFraud())
+    
+    
+
     # Create Fake Data
     for i in range(0, random.randint(5, 15)):
         User('gmail.com', companyName, fake, level)
 
-    return questList
+    return questList, fraudList
