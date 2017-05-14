@@ -8,10 +8,13 @@ Stories generation
 ## Dependencies
 
 - Faker, used to generate fake data
+- graphviz, generate graph to visualize complexity
+- wikipedia, fetch content from wikipedia
 
 ```sh
 $ pip install faker
 $ pip install graphviz
+$ pip install wikipedia
 ```
 or
 ```sh
@@ -26,20 +29,18 @@ Usefull command
 ```sh
 $ python3 init.py
 $ python3 relaunch.py
-$ python3 csv_parser.py
 ```
 
 ## Information
 
 ### csv_parser
+
 The script parse all the csv file under the inputs directory and analyse.
 If their are suitable to generate stories they will be integrated to the scenario.
 
 ## TODO
 
-- More modular
-- Link generation to stories
+- Optimize csv generating system (currently rewritting each time doc content)
+- Add more obfuscation startegy
 - Verify stories dependance
-- Add image in generation
 - Generate quest that will generate stories with from a complexity indicator
-- Generation from csv file
