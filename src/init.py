@@ -17,8 +17,26 @@ from csv_parser import *
 from story import *
 from quest import *
 
+
+
+########################
+#
+# EDIT TO MODIFY COMPLEXITY
+nbLevels = 2
+nbSToryByLevel = 2
+nbQuestByStory = 3
+#
+#
+########################
+
+
 if not os.path.exists('filesystem'):
             os.makedirs('filesystem')
+
+try:
+    os.remove('fakeUser.json')
+except OSError:
+    pass
 
 #CMD HANDLER
 def generateGraphFile():
@@ -93,13 +111,55 @@ def generateSignature():
     return txt
 
 # Load possible senders
-with open("config/user.txt", "r") as myfile:
+with open("config/user.json", "r") as myfile:
     content = myfile.read()
     senders = json.loads(content)
+
+def getSenders():
+    content = ''
+    with open("config/user.json", "r") as myfile:
+        content = myfile.read()
+    senders = json.loads(content)
+    return senders
+    
 
 sender = random.choice(senders)
 signature = generateSignature()
 
+class User:
+    def __init__(self, email):
+        self.email = email
+        self.firstname = "Audrey2"
+        self.lastname = "austin2"
+        self.service = "business2"
+        self.avatar = "female/1.jpg"
+
+
+
+    def toJSON(self):
+        serialize = OrderedDict([
+            ('firstname', self.firstname),
+            ('lastname', self.lastname),
+            ('email', self.email),
+            ('service', self.service),
+            ('avatar', self.avatar),
+          ])
+
+        return serialize
+
+        
+class Users:
+    users = []
+
+    def __init__(self, users):
+        self.users = users
+        
+    def toJSON(self):
+        serialize = list((o.toJSON() for o in self.users))
+
+        return json.dumps(serialize, default=lambda o: o.__dict__, 
+            sort_keys=False, indent=4)
+    
 
 class Level:
     name = ""
@@ -116,7 +176,17 @@ def generateLevelJSON(levels):
             sort_keys=False, indent=4)
     with open(os.path.join('out/Levels.json'), "w") as myfile:
             myfile.write(var)
-        
+
+def writeFakeUser(fraudQuests):
+    baseList = getSenders()
+    baseEmail = [elt['email'] for elt in baseList] 
+    usersFakeL = [elt.quest.sender for elt in fraudQuests if elt not in baseEmail]
+    usersFakeL = list(set(usersFakeL))
+    userFake = [User(elt) for elt in usersFakeL]
+    usersObj = Users(userFake)
+    with open(os.path.join('fakeUser.json'), "a+") as myfile:
+            myfile.write(usersObj.toJSON())
+
 idCount = 1
 total_points = 100
 nb_iteration = 5                                                                                                   
@@ -135,14 +205,13 @@ for i in range(0, nb_iteration):
 scenario = ['contact', 'company', 'csv_parser']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
-nbLevels = 3
-nbSToryByLevel = 3
-nbQuestByStory = 5
+
 for i in range(1, nbLevels):
     toplevel = "out/stories/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
     sender = random.choice(senders)
+    allFrauds = []
     for y in range(0, nbSToryByLevel):
         level = toplevel + '/' + str(y + 1)
         quests = []
@@ -168,6 +237,7 @@ for i in range(1, nbLevels):
         flattenednotLegit = [val for sublist in notLegit for val in sublist]
         story = Story(flattenedLegit)
         frauds = Story(flattenednotLegit)
+        allFrauds += flattenednotLegit
         
         if not os.path.exists(level):
             os.makedirs(level)
@@ -175,7 +245,8 @@ for i in range(1, nbLevels):
             myfile.write(story.toJSON())
         with open(os.path.join(os.path.join(level, 'fraud'), 'init.json'), "w") as myfile:
             myfile.write(frauds.toJSON())
-
+            
+    writeFakeUser(allFrauds)
     levels.append(Level(str(i), i*10))
 
 

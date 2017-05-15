@@ -36,6 +36,8 @@ def removeChar(mail):
 def swapChar(mail):
     position1 = random.randint(0,len(mail)-1);
     position2 = random.randint(0,len(mail)-1);
+    if position1 == position2:
+        return removeChar(mail)
     res = swap(mail, position1, position2)
     return res
 
@@ -44,10 +46,10 @@ def swapChar(mail):
 transformList = ['dotsTransform', 'insertChar', 'removeChar', 'swapChar']
 #complexity between 1 and 5
 def emailTransform(mail, complexity):
-    if (len(mail)) < 5:
+    if (len(mail)) < 3:
         return mail
     if complexity <= 0:
-        complexity = 1
+        complexity = 2
     elif complexity > 5:
         complexity = 5
     newEmail = mail
