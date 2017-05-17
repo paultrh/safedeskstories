@@ -127,13 +127,13 @@ sender = random.choice(senders)
 signature = generateSignature()
 
 class User:
-    def __init__(self, email):
+    def __init__(self, email, firstname = "Audrey2", lastname = "austin2", service = "business2", avatar = "female/1.jpg", typeU = "fake"):
         self.email = email
-        self.firstname = "Audrey2"
-        self.lastname = "austin2"
-        self.service = "business2"
-        self.avatar = "female/1.jpg"
-
+        self.firstname = firstname
+        self.lastname = lastname
+        self.service = service
+        self.avatar = avatar
+        self.type = typeU
 
 
     def toJSON(self):
@@ -143,6 +143,7 @@ class User:
             ('email', self.email),
             ('service', self.service),
             ('avatar', self.avatar),
+            ('type', self.type),
           ])
 
         return serialize
@@ -183,13 +184,21 @@ def writeFakeUser(fraudQuests):
     usersFakeL = [elt.quest.sender for elt in fraudQuests if elt not in baseEmail]
     usersFakeL = list(set(usersFakeL))
     userFake = [User(elt) for elt in usersFakeL]
+
+
+    # LOAD LEGIT USER
+    with open('config/user.json') as data_file:    
+        data = json.load(data_file, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    for elt in data:
+        userFake.append(User(elt.email, elt.firstname, elt.lastname, elt.service, elt.avatar, elt.type))
     usersObj = Users(userFake)
-    with open(os.path.join('fakeUser.json'), "a+") as myfile:
+    print(usersObj)
+    with open(os.path.join('Users.json'), "a+") as myfile:
             myfile.write(usersObj.toJSON())
 
 idCount = 1
 total_points = 100
-nb_iteration = 5                                                                                                   
+nb_iteration = 5                                                                                                
 
 rootdir = os.getcwd()
 sub_folders = []
