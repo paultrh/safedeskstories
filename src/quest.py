@@ -77,7 +77,6 @@ class TimeOut(Linker):
         self.score = -score;
         self.populate(False)
         
-
 class Evil():
     def __init__(self, quest):
         self.quest = deepcopy(quest)
@@ -112,7 +111,8 @@ class Evil():
 
     def modifySenderEmail(self):
         email = self.quest.sender
-        email = obfuscationAlgorythm.emailTransform(email, 1)
+        email = obfuscationAlgorythm.emailTransform(email,
+                                                    int(self.quest.level.split('stories/')[1][0]))
         self.quest.sender = email
 
         

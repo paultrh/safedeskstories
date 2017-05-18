@@ -22,7 +22,7 @@ from quest import *
 ########################
 #
 # EDIT TO MODIFY COMPLEXITY
-nbLevels = 2
+nbLevels = 5
 nbSToryByLevel = 2
 nbQuestByStory = 3
 #
@@ -34,7 +34,7 @@ if not os.path.exists('filesystem'):
             os.makedirs('filesystem')
 
 try:
-    os.remove('fakeUser.json')
+    os.remove('Users.json')
 except OSError:
     pass
 
@@ -185,14 +185,12 @@ def writeFakeUser(fraudQuests):
     usersFakeL = list(set(usersFakeL))
     userFake = [User(elt) for elt in usersFakeL]
 
-
     # LOAD LEGIT USER
     with open('config/user.json') as data_file:    
         data = json.load(data_file, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     for elt in data:
         userFake.append(User(elt.email, elt.firstname, elt.lastname, elt.service, elt.avatar, elt.type))
     usersObj = Users(userFake)
-    print(usersObj)
     with open(os.path.join('Users.json'), "a+") as myfile:
             myfile.write(usersObj.toJSON())
 

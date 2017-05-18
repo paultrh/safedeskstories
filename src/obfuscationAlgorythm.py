@@ -51,9 +51,9 @@ def emailTransform(mail, complexity):
     if complexity <= 0:
         complexity = 2
     elif complexity > 5:
-        complexity = 5
+        complexity = 4
     newEmail = mail
-    for i in range(complexity):
+    for i in range(5-complexity):
         res = random.choice(transformList)
         if (res == 'dotsTransform'):
             newEmail = dotsTransform(newEmail)
