@@ -213,12 +213,12 @@ scenario = ['contact', 'company', 'csv_parser']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
 
+allFrauds = []
 for i in range(1, nbLevels):
     toplevel = "out/stories/" + str(i)
     local = random.choice(contries)
     fake = Faker(local)
     sender = random.choice(senders)
-    allFrauds = []
     for y in range(0, nbSToryByLevel):
         level = toplevel + '/' + str(y + 1)
         quests = []
@@ -253,8 +253,8 @@ for i in range(1, nbLevels):
         with open(os.path.join(os.path.join(level, 'fraud'), 'init.json'), "w") as myfile:
             myfile.write(frauds.toJSON())
             
-    writeFakeUser(allFrauds)
     levels.append(Level(str(i), i*10))
+writeFakeUser(allFrauds)
 
 
 generateLevelJSON(levels)
