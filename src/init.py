@@ -43,13 +43,13 @@ except OSError:
 try:
     shutil.rmtree('api')
 except OSError:
-    console.log("nope")
+    print("nope")
     pass
 
 try:
     shutil.rmtree('out')
 except OSError:
-    console.log("nope")
+    print("nope")
     pass
 
 #CMD HANDLER
@@ -59,7 +59,7 @@ def generateGraphFile():
     dot = Digraph(comment='The story', format='png')
     for root, dirs, files in os.walk("."):
         for file in files:
-            if (file == "init.json"):
+            if (file == "init.json" and not "SPAM" in root):
                 with open(os.path.join(root, file)) as data_file:
                     story = json.loads(data_file.read(), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
                     tmpGlobal = []
@@ -192,6 +192,18 @@ def generateLevelJSON(levels):
     with open(os.path.join('out/Levels.json'), "w") as myfile:
             myfile.write(var)
 
+def GetSpamUsers():
+    with open('SPAM/SpamUser.config', "r") as myfile:
+        content = myfile.readlines()
+    content = [x.strip() for x in content[2:]]
+    usersSPAM = []
+    i = 0
+    for elt in content:
+        usersSPAM.append(User(elt, "SPAM"+str(i), "SPAM"+str(i), "SPAM SERVICE", "female/1.jpg", "fake"))
+        i += 1
+    return usersSPAM
+
+
 def writeFakeUser(fraudQuests):
     baseList = getSenders()
     baseEmail = [elt['email'] for elt in baseList] 
@@ -204,6 +216,9 @@ def writeFakeUser(fraudQuests):
         data = json.load(data_file, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     for elt in data:
         userFake.append(User(elt.email, elt.firstname, elt.lastname, elt.service, elt.avatar, elt.type))
+    userSPAM = GetSpamUsers()
+    for elt in userSPAM:
+        userFake.append(elt)
     usersObj = Users(userFake)
     with open(os.path.join('Users.json'), "a+") as myfile:
             myfile.write(usersObj.toJSON())

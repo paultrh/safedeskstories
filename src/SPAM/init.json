@@ -1,22 +1,78 @@
 [
     {
-        "name": "out/stories/1/11",
-        "sender": "samuel.cunningham85@yahoo.com",
-        "subject": "[R&D] Complete folder",
-        "content": "initCustomQuest1outstories11",
+        "name": "SPAMConsole",
+        "sender": "gamer.player@gmail.com",
+        "subject": "You just win a console !",
+        "content": "console.md",
         "good": {
-            "keywords": [
-                "Retired"
-            ],
-            "link": "out/stories/1/14",
-            "score": 300
+            "keywords": [],
+            "link": null,
+            "score": -200
         },
         "bad": {
-            "link": "out/stories/1/12",
-            "score": -300
+            "link": null,
+            "score": -200
         },
         "timeout": {
-            "link": "out/stories/1/13",
-            "score": -300
+            "link": null,
+            "score": 200
         }
     },
+    {
+        "name": "SPAMDiscount",
+        "sender": "sales.discount@hotmail.com",
+        "subject": "[99% OFF] DISCOUNT !",
+        "content": "discount.md",
+        "good": {
+            "keywords": [],
+            "link": null,
+            "score": -200
+        },
+        "bad": {
+            "link": null,
+            "score": -200
+        },
+        "timeout": {
+            "link": null,
+            "score": 200
+        }
+    },
+    {
+        "name": "SPAMFbi",
+        "sender": "fbi.repression@gov.us",
+        "subject": "[LEGAL][FBI] Investigation",
+        "content": "fbi.md",
+        "good": {
+            "keywords": [],
+            "link": null,
+            "score": -200
+        },
+        "bad": {
+            "link": null,
+            "score": -200
+        },
+        "timeout": {
+            "link": null,
+            "score": 200
+        }
+    },
+    {
+        "name": "SPAMJardin",
+        "sender": "garden.passion@flower.com",
+        "subject": "Summer time !",
+        "content": "jardin.md",
+        "good": {
+            "keywords": [],
+            "link": null,
+            "score": -200
+        },
+        "bad": {
+            "link": null,
+            "score": -200
+        },
+        "timeout": {
+            "link": null,
+            "score": 200
+        }
+    }
+]
