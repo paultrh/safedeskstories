@@ -30,6 +30,10 @@ Usefull command
 $ python3 init.py
 $ python3 relaunch.py
 ```
+## API.IA
+
+Right now only the contact stories works with the API.
+The needed generated file too train the api are under the /api folder
 
 ## Information
 
@@ -37,6 +41,13 @@ $ python3 relaunch.py
 
 The script parse all the csv file under the inputs directory and analyse.
 If their are suitable to generate stories they will be integrated to the scenario.
+
+
+### SPAM GENERATION
+
+SPAM file are store under the SPAM/ directory.
+They follow the same pattern as every others emails.
+The users taht sends the mail must be referenced in the SpamUser.config file
 
 ## TODO
 
