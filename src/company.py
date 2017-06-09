@@ -10,7 +10,7 @@ quali = ['Above', 'Under', 'Around']
 functions = ['Employee', 'Manager', 'Engineer', 'Intern', 'Sales person', 'Technician', 'Consultant']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 story_type = 'Company'
-init_subject = 'Investigate companies'
+init_subject = ['Looking for new PartnerShips', 'Legal issue with affiliate firm', 'Signing the contract']
 bad_subject = 'Wrong information'
 timeout_subject = 'Transfer case'
 
@@ -238,12 +238,12 @@ class Company(Quest):
 
 # NOTE : Should refactor but may divert from one quest to another
 def generateCompany(start_id, sender, score, is_last, story_name, signature, fake,
-                    isLast, level):
+                    isLast, level, z):
     companyName = 'secuGov'
 
     # Create Specific Content
     questList = []
-    init = Company(start_id, start_id, story_name, sender, init_subject,
+    init = Company(start_id, start_id, story_name, sender, init_subject[z],
             "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
                    score, False, False, signature, isLast, level)
     init.generateEmail(CompanyModel('gmail.com', fake, level))

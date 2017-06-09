@@ -16,6 +16,8 @@ from company import *
 from csv_parser import *
 from story import *
 from quest import *
+import shutil
+
 
 
 
@@ -24,7 +26,7 @@ from quest import *
 # EDIT TO MODIFY COMPLEXITY
 nbLevels = 5
 nbSToryByLevel = 2
-nbQuestByStory = 3
+nbQuestByStory = 3  # DO NOT MODIFY UNLESS YOU KNOW WHAT YOU'RE DOING
 #
 #
 ########################
@@ -36,6 +38,18 @@ if not os.path.exists('filesystem'):
 try:
     os.remove('Users.json')
 except OSError:
+    pass
+
+try:
+    shutil.rmtree('api')
+except OSError:
+    console.log("nope")
+    pass
+
+try:
+    shutil.rmtree('out')
+except OSError:
+    console.log("nope")
     pass
 
 #CMD HANDLER
@@ -220,21 +234,21 @@ for i in range(1, nbLevels):
     fake = Faker(local)
     sender = random.choice(senders)
     for y in range(0, nbSToryByLevel):
+        destiny = random.choice(scenario)
         level = toplevel + '/' + str(y + 1)
         quests = []
         idcount = 1
         for z in range(1, nbQuestByStory):
-            destiny = random.choice(scenario)
             print(destiny)
             isLast = False
             if (z == nbQuestByStory - 1):
                 isLast = True
             if (destiny == 'contact'):
-                quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level)
+                quests += generateContact(idcount, sender['email'], 100, False, "plop", signature, fake, isLast, level, z)
             elif (destiny == 'company'):
-                quests += generateCompany(idcount, sender['email'], 200, False, "plop", signature, fake, isLast, level)
+                quests += generateCompany(idcount, sender['email'], 200, False, "plop", signature, fake, isLast, level, z)
             elif (destiny == 'csv_parser'):
-                quests += generateCustom(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level)    
+                quests += generateCustom(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level, z)    
             idcount += 3
             print(' Completed')
 

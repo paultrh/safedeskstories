@@ -10,9 +10,9 @@ import random
 functions = ['Employee', 'Manager', 'Engineer', 'Intern', 'Sales person', 'Technician', 'Consultant']
 
 story_type = 'Contact'
-init_subject = 'Starting partnership'
+init_subject = ['Weekly Intern investigation', 'Irregularities found in departement', 'Closing weekly intern revue']
 bad_subject = 'Wrong information'
-timeout_subject = 'Customer went to concurrency'
+timeout_subject = 'Investigation failed'
 
 
 #### DOCUMENT GENERATION ####
@@ -34,7 +34,7 @@ class User():
         self.level = level
         self.companyName = companyName
         self.name = fake.name()
-        self.phone_number = str(fake.phone_number())
+        self.phone_number = str(fake.phone_number()).replace('(', '').replace(')', '')
         self.email = self.name.replace(" ", "")+"@"+ domain
         self.function = random.choice(functions)
         self.age = str(random.randint(25, 75))
@@ -53,6 +53,14 @@ class User():
         var = var + "}"
         with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
+        self.generateAPI_CSVFile();
+            
+    def generateAPI_CSVFile(self):
+        if not os.path.exists('api'):
+            os.makedirs('api')
+        for attr, value in self.__dict__.items():
+            with open("api/"+attr+".csv", "a+") as myfile:
+                myfile.write('"'+value+'","'+value+'"'+'\n')
             
     def WriteToFile(self, filename):
         filenameOrigin = filename
@@ -150,7 +158,7 @@ class Contact(Quest):
 
 # NOTE : Should refactor but may divert from one quest to another
 def generateContact(start_id, sender, score, is_last, story_name, signature, fake,
-                    isLast, level):
+                    isLast, level, z):
     companyName = 'secuGov'
     # Create Fake Data
     for i in range(0, random.randint(5, 15)):
@@ -158,7 +166,7 @@ def generateContact(start_id, sender, score, is_last, story_name, signature, fak
 
     # Create Specific Content
     questList = []
-    init = Contact(start_id, start_id, story_name, sender, init_subject,
+    init = Contact(start_id, start_id, story_name, sender, init_subject[z],
             "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
                    score, False, False, signature, isLast, level)
     init.generateEmail(User('gmail.com', companyName, fake, level))

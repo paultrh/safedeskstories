@@ -8,6 +8,11 @@ import random
 import wikipediaScrap
 import bingScrap
 
+story_type = "Custom"
+init_subject = ['[R&D] Discovering subjects', '[R&D] Complete folder', '[R&D] Finalising research']
+bad_subject = 'Wrong information'
+timeout_subject = 'Customer went to concurrency'
+
 def sanityzeData(data):
   data = data.replace('_', ' ')
   return data.capitalize()
@@ -201,12 +206,8 @@ def AnalyseDataSet(filename, file, level):
 
 # NOTE : Should refactor but may divert from one quest to another
 def generateCustom(start_id, sender, score, is_last, story_name, signature, fake,
-                    isLast, level):
+                    isLast, level, z):
     companyName = 'secuGov'
-    story_type = "Custom"
-    init_subject = 'Starting partnership'
-    bad_subject = 'Wrong information'
-    timeout_subject = 'Customer went to concurrency'
 
     potentialStories = []
     for subdir, dirs, files in os.walk('inputs'):
@@ -223,7 +224,7 @@ def generateCustom(start_id, sender, score, is_last, story_name, signature, fake
       print(' -> '+ val[0] +' -> ', end='')
       # Create Specific Content
       questList = []
-      init = Custom(start_id, start_id, story_name, sender, init_subject,
+      init = Custom(start_id, start_id, story_name, sender, init_subject[z],
                     "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
                            score, False, False, signature, isLast, level, manager)
       bad = Custom(start_id, start_id + 1, story_name, sender, bad_subject,
