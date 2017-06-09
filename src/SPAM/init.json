@@ -1,0 +1,22 @@
+[
+    {
+        "name": "out/stories/1/11",
+        "sender": "samuel.cunningham85@yahoo.com",
+        "subject": "[R&D] Complete folder",
+        "content": "initCustomQuest1outstories11",
+        "good": {
+            "keywords": [
+                "Retired"
+            ],
+            "link": "out/stories/1/14",
+            "score": 300
+        },
+        "bad": {
+            "link": "out/stories/1/12",
+            "score": -300
+        },
+        "timeout": {
+            "link": "out/stories/1/13",
+            "score": -300
+        }
+    },
