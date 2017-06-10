@@ -65,7 +65,7 @@ class Bad(Linker):
             self.linkId = None
         else:
             self.linkId = linkId + 1
-        self.score = -score;
+        self.score = int(-score*0.5);
         self.populate(False)
 
 class TimeOut(Linker):
@@ -75,7 +75,7 @@ class TimeOut(Linker):
             self.linkId = None
         else:
             self.linkId = linkId + 2
-        self.score = -score;
+        self.score = int(-score*0.5);
         self.populate(False)
         
 class Evil():
