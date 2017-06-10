@@ -21,6 +21,7 @@ class Linker():
         
     def populate(self, is_good):
         if (is_good):
+            print(self.keywords)
             if (self.linkId == None):
                 self.serialize = OrderedDict([
                     ('keywords', self.keywords),

@@ -59,8 +59,10 @@ class User():
         if not os.path.exists('api'):
             os.makedirs('api')
         for attr, value in self.__dict__.items():
-            with open("api/"+attr+".csv", "a+") as myfile:
-                myfile.write('"'+value+'","'+value+'"'+'\n')
+            if (attr in ["years_in_field","last_connection","name","phone_number","email"]):
+                with open("api/"+attr+".csv", "a+") as myfile:
+                    myfile.write('"'+value+'","'+value+'"'+'\n')
+            
             
     def WriteToFile(self, filename):
         filenameOrigin = filename
@@ -102,17 +104,16 @@ class Contact(Quest):
         lUnary = {'name' : user.name,
                   'phone number' : user.phone_number,
                   'email' : user.email}
-        lNotUnary = {'age' : user.age,
-                     'marital status' : user.married,
-                     'role in the company' : user.function,
-                     'experience' : user.years_in_field,
-                     'last connection to the IT service' : user.last_connection
+        lNotUnary = {'Age-age' : user.age,
+                     'Function-role in the company' : user.function,
+                     'Years_in_field-experience' : user.years_in_field,
+                     'LastConnection-last connection to the IT service' : user.last_connection
                      }
         txt = ""
         txt += "I am looking for the "
         res = random.choice(list(lNotUnary.items()))
-        txt += res[0]
-        self.keywords.append(res[1])
+        txt += res[0].split("-")[1]
+        self.keywords['Entity'].append({ str(res[0].split("-")[0]) : res[1]})
         txt += " of a specific employee whose "
         tmp = random.choice(list(lUnary.items()))
         txt += tmp[0] + " is " + tmp[1] + os.linesep
@@ -160,6 +161,7 @@ class Contact(Quest):
 def generateContact(start_id, sender, score, is_last, story_name, signature, fake,
                     isLast, level, z):
     companyName = 'secuGov'
+    IntentName = 'FindUserInfo'
     # Create Fake Data
     for i in range(0, random.randint(5, 15)):
         User('gmail.com', companyName, fake, level)
@@ -167,16 +169,16 @@ def generateContact(start_id, sender, score, is_last, story_name, signature, fak
     # Create Specific Content
     questList = []
     init = Contact(start_id, start_id, story_name, sender, init_subject[z],
-            "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
+            "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'Intent' : IntentName, 'Entity' : []},
                    score, False, False, signature, isLast, level)
     init.generateEmail(User('gmail.com', companyName, fake, level))
     bad = Contact(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
+            "bad" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'Intent' : IntentName, 'Entity' : []},
                   score, True, False, signature, isLast, level)
     bad.content = init.content
     bad.setKeywords(init.keywords)
     timeOut = Contact(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", [],
+            "timeOut" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'Intent' : IntentName, 'Entity' : []},
                       score, False, True, signature, isLast, level)
     questList.append(init)
     questList.append(bad)

@@ -239,6 +239,7 @@ for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
 scenario = ['contact', 'company', 'csv_parser']
+scenario = ['contact']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
 
