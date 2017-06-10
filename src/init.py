@@ -283,7 +283,7 @@ for i in range(1, nbLevels):
         with open(os.path.join(os.path.join(level, 'fraud'), 'init.json'), "w") as myfile:
             myfile.write(frauds.toJSON())
             
-    levels.append(Level(str(i), i*10))
+    levels.append(Level(str(i), i*200))
 writeFakeUser(allFrauds)
 
 
