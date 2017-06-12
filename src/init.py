@@ -110,10 +110,6 @@ def generateGraphFile():
                     dot.edge(last_good,"END"+str(node_number), color='green')
                     dot.edge(last_bad,"END"+str(node_number), color='green')
                     node_number = node_number + 1
-                    try:
-                        dot.render('graph.gv', view=True)
-                    except:
-                        pass
                     
                     
 
