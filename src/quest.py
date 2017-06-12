@@ -5,6 +5,9 @@ import obfuscationAlgorythm
 from story import *
 from copy import deepcopy
 
+class Object(object):
+    pass
+
 class Linker():
     linkId = 0
     score = 0
@@ -21,10 +24,14 @@ class Linker():
         
     def populate(self, is_good):
         if (is_good):
+            a = Object()
+            for elt in self.keywords['entities']:
+                for key in elt:
+                    setattr(a, key, elt[key])
             if (self.linkId == None):
                 self.serialize = OrderedDict([
                     ('intent', self.keywords['intent']),
-                    ('entities', self.keywords['entities']),
+                    ('entities', a),
                     ('link', self.linkId),
                     ('score', self.score),
                   ])
@@ -32,7 +39,7 @@ class Linker():
                 self.linkId = self.level + str(self.linkId)
                 self.serialize = OrderedDict([
                     ('intent', self.keywords['intent']),
-                    ('entities', self.keywords['entities']),
+                    ('entities', a),
                     ('link', self.linkId),
                     ('score', self.score),
                   ])
