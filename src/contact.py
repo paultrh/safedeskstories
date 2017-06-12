@@ -113,7 +113,7 @@ class Contact(Quest):
         txt += "I am looking for the "
         res = random.choice(list(lNotUnary.items()))
         txt += res[0].split("-")[1]
-        self.keywords['Entity'].append({ str(res[0].split("-")[0]) : res[1]})
+        self.keywords['entities'].append({ str(res[0].split("-")[0]) : res[1]})
         txt += " of a specific employee whose "
         tmp = random.choice(list(lUnary.items()))
         txt += tmp[0] + " is " + tmp[1] + os.linesep
@@ -169,16 +169,16 @@ def generateContact(start_id, sender, score, is_last, story_name, signature, fak
     # Create Specific Content
     questList = []
     init = Contact(start_id, start_id, story_name, sender, init_subject[z],
-            "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'Intent' : IntentName, 'Entity' : []},
+            "init" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'intent' : IntentName, 'entities' : []},
                    score, False, False, signature, isLast, level)
     init.generateEmail(User('gmail.com', companyName, fake, level))
     bad = Contact(start_id, start_id + 1, story_name, sender, bad_subject,
-            "bad" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'Intent' : IntentName, 'Entity' : []},
+            "bad" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'intent' : IntentName, 'entities' : []},
                   score, True, False, signature, isLast, level)
     bad.content = init.content
     bad.setKeywords(init.keywords)
     timeOut = Contact(start_id, start_id + 2, story_name, sender, timeout_subject,
-            "timeOut" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'Intent' : IntentName, 'Entity' : []},
+            "timeOut" + story_type  + "Quest" + str(start_id) + level.replace('/', '') + ".md", { 'intent' : IntentName, 'entities' : []},
                       score, False, True, signature, isLast, level)
     questList.append(init)
     questList.append(bad)

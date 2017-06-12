@@ -21,17 +21,18 @@ class Linker():
         
     def populate(self, is_good):
         if (is_good):
-            print(self.keywords)
             if (self.linkId == None):
                 self.serialize = OrderedDict([
-                    ('keywords', self.keywords),
+                    ('intent', self.keywords['intent']),
+                    ('entities', self.keywords['entities']),
                     ('link', self.linkId),
                     ('score', self.score),
                   ])
             else:
                 self.linkId = self.level + str(self.linkId)
                 self.serialize = OrderedDict([
-                    ('keywords', self.keywords),
+                    ('intent', self.keywords['intent']),
+                    ('entities', self.keywords['entities']),
                     ('link', self.linkId),
                     ('score', self.score),
                   ])
