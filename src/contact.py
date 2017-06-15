@@ -5,6 +5,7 @@ from faker import Faker
 import json
 from collections import OrderedDict
 import random
+import requests
 
 
 functions = ['Employee', 'Manager', 'Engineer', 'Intern', 'Sales person', 'Technician', 'Consultant']
@@ -54,12 +55,12 @@ class User():
         with open(os.path.join(name + ".json"), "w") as myfile:
             myfile.write(var)
         self.generateAPI_CSVFile();
-            
+    
     def generateAPI_CSVFile(self):
         if not os.path.exists('api'):
             os.makedirs('api')
         for attr, value in self.__dict__.items():
-            if (attr in ["years_in_field","last_connection","name","phone_number","email"]):
+            if (attr in ["last_connection","name","phone_number","email"]):
                 with open("api/"+attr+".csv", "a+") as myfile:
                     myfile.write('"'+value+'","'+value+'"'+'\n')
             

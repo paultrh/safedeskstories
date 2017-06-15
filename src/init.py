@@ -285,3 +285,35 @@ writeFakeUser(allFrauds)
 
 generateLevelJSON(levels)
 generateGraphFile()
+
+
+print("sending data to API.IA ...")
+apikey = '708e39a20a024927b6ce408d706ac0dc'
+ids = ['46a2f0c6-3461-4483-93ef-d1d10e860d10', 'c2f7acb2-0036-4242-b975-79c69739dc18',
+       'c9acdd6c-da5f-4ef7-b1fd-2177b9c66004', '992c9f16-44e3-48e3-8d46-ce1418ffe9f4']
+
+def sendDataForFile(file, ids, apikey):
+    with open(os.path.join('api', file), "r+") as f:
+        content = f.readlines()
+    content = [x.strip() for x in content]
+    listValues = []
+    for elt in content:
+        elt = elt.split(",")[0]
+        eltDict = {"value" : elt, "synonyms" : [ elt, elt ]}
+        listValues.append(eltDict)
+    index = ["last_connection","name","phone_number","email"].index(file.split('.')[0])
+    print("Uploading " + file.split('.')[0] + " ids " + ids[index])
+    entriesDict = {"id" : ids[index], "name" : file.split('.')[0], "entries" : listValues}
+    payload = json.dumps(entriesDict, default=lambda o: o.__dict__, 
+            sort_keys=False, indent=4)
+    headers = {'Authorization': 'Bearer '+apikey, 'Content-Type': 'application/json'}
+    r = requests.put("https://api.api.ai/v1/entities/"+ids[index], headers=headers,data=payload)
+    print(r.content)
+    print(r.status_code)
+
+    
+list_of_files = {}
+for (dirpath, dirnames, filenames) in os.walk('api/'):
+    for filename in filenames:
+        sendDataForFile(filename, ids, apikey)
+
