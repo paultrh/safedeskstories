@@ -3,7 +3,7 @@
         "name": "SPAMConsole",
         "sender": "gamer.player@gmail.com",
         "subject": "You just win a console !",
-        "content": "console.md",
+        "content": "console",
         "good": {
             "keywords": [],
             "link": null,
@@ -22,7 +22,7 @@
         "name": "SPAMDiscount",
         "sender": "sales.discount@hotmail.com",
         "subject": "[99% OFF] DISCOUNT !",
-        "content": "discount.md",
+        "content": "discount",
         "good": {
             "keywords": [],
             "link": null,
@@ -41,7 +41,7 @@
         "name": "SPAMFbi",
         "sender": "fbi.repression@gov.us",
         "subject": "[LEGAL][FBI] Investigation",
-        "content": "fbi.md",
+        "content": "fbi",
         "good": {
             "keywords": [],
             "link": null,
@@ -60,7 +60,7 @@
         "name": "SPAMJardin",
         "sender": "garden.passion@flower.com",
         "subject": "Summer time !",
-        "content": "jardin.md",
+        "content": "jardin",
         "good": {
             "keywords": [],
             "link": null,
