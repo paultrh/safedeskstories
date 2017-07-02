@@ -177,7 +177,7 @@ class Level:
     required_score = 0
     def __init__(self, name, required_score):
         self.name = name
-        self.required_score = required_score
+        self.required_score = required_score - 200
 
 
 def generateLevelJSON(levels):
@@ -293,7 +293,7 @@ ids = ['46a2f0c6-3461-4483-93ef-d1d10e860d10', 'c2f7acb2-0036-4242-b975-79c69739
        'c9acdd6c-da5f-4ef7-b1fd-2177b9c66004', '992c9f16-44e3-48e3-8d46-ce1418ffe9f4']
 
 def sendDataForFile(file, ids, apikey):
-    with open(os.path.join('api', file), "r+") as f:
+    with open(os.path.join('api', file), "r+", encoding='utf8') as f:
         content = f.readlines()
     content = [x.strip() for x in content]
     listValues = []

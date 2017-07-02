@@ -61,7 +61,10 @@ class User():
             os.makedirs('api')
         for attr, value in self.__dict__.items():
             if (attr in ["last_connection","name","phone_number","email"]):
-                with open("api/"+attr+".csv", "a+") as myfile:
+                with open("api/"+attr+".csv", "a+", encoding='utf8') as myfile:
+                    value = value.replace(",", ".")
+                    if (attr == "name"):
+                        print(value)
                     myfile.write('"'+value+'","'+value+'"'+'\n')
             
             
