@@ -1,0 +1,18 @@
+[
+    {
+        "firstname": "SPAM4",
+        "lastname": "SPAM4",
+        "email": "42.school@gmail.com",
+        "service": "SPAM SERVICE",
+        "avatar": "female/1.jpg",
+        "type": "fake"
+    },
+    {
+        "firstname": "SPAM5",
+        "lastname": "SPAM5",
+        "email": "consulting.loi@laposte.net",
+        "service": "SPAM SERVICE",
+        "avatar": "female/1.jpg",
+        "type": "fake"
+    }
+]

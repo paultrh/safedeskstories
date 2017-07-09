@@ -1,0 +1,40 @@
+[
+    {
+        "name": "SPAM42",
+        "sender": "42.school@gmail.com",
+        "subject": "Born to code ?",
+        "content": "42",
+        "good": {
+            "keywords": [],
+            "link": null,
+            "score": -200
+        },
+        "bad": {
+            "link": null,
+            "score": -200
+        },
+        "timeout": {
+            "link": null,
+            "score": 200
+        }
+    },
+    {
+        "name": "SPAMLawer",
+        "sender": "consulting.loi@laposte.net",
+        "subject": "Justice is after you ?",
+        "content": lawer
+        "good": {
+            "keywords": [],
+            "link": null,
+            "score": -200
+        },
+        "bad": {
+            "link": null,
+            "score": -200
+        },
+        "timeout": {
+            "link": null,
+            "score": 200
+        }
+    },
+]
