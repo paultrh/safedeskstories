@@ -1,0 +1,26 @@
+Setup initial:
+	Level 1		score 900
+	Level 2 deboque a score 1000
+Dernier mail reçu -> Demo/stories/3/21
+si good -> +200 -> Demo/stories/3/24
+si bad -> -50 -> Demo/stories/3/22
+si timeout -50 -> Demo/stories/3/23
+
+DEBUT DE LA DEMO
+Regrade dernier mail recu
+ouvre filesystem on fait une recherche 
+On repond que Gabrielly Oliveira est Manager
+donc bad <-- (good étant engineer)
+on en conclut que on a eu la mauvaise info.
+on va dans vue 3D on branche la clef USB.
+Retour sur le filesystem
+Ouvre dossier de la cef usb
+on trouve nouvelle info
+on repond on gagne
+on change de niveau -> go dans les stats
+puis dans shop on debloque nouveau skybox
+on va dans mail on a reçu SPAM de 42 + fraud
+on mark comme spam
+on va dans vu 3D skybox a changer et HUD
+montre evolution du score on check dossier top secret qui valide que fraud
+FIN DE LA DEMO

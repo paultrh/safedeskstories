@@ -1,0 +1,66 @@
+[
+    {
+        "name": "out/stories/3/2/fraud1",
+        "sender": "marshallzpere.61hotmail.com",
+        "subject": "Irregularities found in departement",
+        "content": "initDemoFraud",
+        "good": {
+            "intent": "FindUserInfo",
+            "entities": {
+                "Function": "Engineer"
+            },
+            "link": "out/stories/3/2/fraud4",
+            "score": 100
+        },
+        "bad": {
+            "link": "out/stories/3/2/fraud2",
+            "score": -50
+        },
+        "timeout": {
+            "link": "out/stories/3/2/fraud3",
+            "score": -50
+        }
+    },
+    {
+        "name": "out/stories/3/2/fraud2",
+        "sender": "marshall.pemez61@homail.cor",
+        "subject": "Wrong information",
+        "content": "badDemoFraud",
+        "good": {
+            "intent": "FindUserInfo",
+            "entities": {
+                "Function": "Engineer"
+            },
+            "link": "out/stories/3/2/fraud4",
+            "score": 100
+        },
+        "bad": {
+            "link": "out/stories/3/2/fraud3",
+            "score": -50
+        },
+        "timeout": {
+            "link": "out/stories/3/2/fraud3",
+            "score": -50
+        }
+    },
+    {
+        "name": "out/stories/3/2/fraud3",
+        "sender": "6arshall.perezm1d@hotmail.com",
+        "subject": "Investigation failed",
+        "content": "timeOutDemoFraud",
+        "good": {
+            "intent": "FindUserInfo",
+            "entities": {},
+            "link": null,
+            "score": 100
+        },
+        "bad": {
+            "link": null,
+            "score": -50
+        },
+        "timeout": {
+            "link": null,
+            "score": -50
+        }
+    }
+]
