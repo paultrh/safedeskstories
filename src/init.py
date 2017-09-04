@@ -199,6 +199,17 @@ def GetSpamUsers():
         i += 1
     return usersSPAM
 
+def GetGoogleUsers():
+    with open('GOOGLE/GoogleUser.config', "r") as myfile:
+        content = myfile.readlines()
+    content = [x.strip() for x in content]
+    GoogleUser = []
+    i = 0
+    for elt in content:
+        GoogleUser.append(User(elt, "GOOGLE"+str(i), "GOOGLE"+str(i), "Business", "female/1.jpg", random.choice(["fake", "legit"])))
+        i += 1
+    return GoogleUser
+
 
 def writeFakeUser(fraudQuests):
     baseList = getSenders()
@@ -213,7 +224,10 @@ def writeFakeUser(fraudQuests):
     for elt in data:
         userFake.append(User(elt.email, elt.firstname, elt.lastname, elt.service, elt.avatar, elt.type))
     userSPAM = GetSpamUsers()
+    userGoogle = GetGoogleUsers()
     for elt in userSPAM:
+        userFake.append(elt)
+    for elt in userGoogle:
         userFake.append(elt)
     usersObj = Users(userFake)
     with open(os.path.join('Users.json'), "a+") as myfile:
@@ -235,6 +249,7 @@ for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
 scenario = ['contact', 'company', 'csv_parser']
+#API.AI not implemented everywhere
 scenario = ['contact']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
@@ -284,9 +299,9 @@ writeFakeUser(allFrauds)
 
 
 generateLevelJSON(levels)
-generateGraphFile()
+#generateGraphFile()
 
-
+'''
 print("sending data to API.IA ...")
 apikey = '708e39a20a024927b6ce408d706ac0dc'
 ids = ['46a2f0c6-3461-4483-93ef-d1d10e860d10', 'c2f7acb2-0036-4242-b975-79c69739dc18',
@@ -310,10 +325,9 @@ def sendDataForFile(file, ids, apikey):
     r = requests.put("https://api.api.ai/v1/entities/"+ids[index], headers=headers,data=payload)
     print(r.content)
     print(r.status_code)
-
-    
+   
 list_of_files = {}
 for (dirpath, dirnames, filenames) in os.walk('api/'):
     for filename in filenames:
         sendDataForFile(filename, ids, apikey)
-
+'''
