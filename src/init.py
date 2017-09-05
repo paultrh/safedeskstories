@@ -250,7 +250,7 @@ for i in range(0, nb_iteration):
 
 scenario = ['contact', 'company', 'csv_parser']
 #API.AI not implemented everywhere
-scenario = ['contact']
+scenario = ['csv_parser']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
 

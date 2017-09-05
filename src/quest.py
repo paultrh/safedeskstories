@@ -25,6 +25,7 @@ class Linker():
     def populate(self, is_good):
         if (is_good):
             a = Object()
+            print(self.keywords)
             for elt in self.keywords['entities']:
                 for key in elt:
                     setattr(a, key, elt[key])

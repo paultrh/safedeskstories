@@ -5,8 +5,8 @@ import os
 
 #This API key is currently active
 #30 days remaining
-#Key 1: 15b80811a3d0460dbd62989feadae6bf
-#Key 2: 7cededa473ab4266bf73f5eef4fc1c56
+#Key 1: 6894a55bb34a4fd2b25e1ce2621824c0
+#Key 2: b527d5d3c6f2433583c6f1f99751dcf2
 
 def getMarkdown(name, path):
     txt = ''
@@ -18,7 +18,7 @@ def bing_search(query):
     # query string parameters
     payload = {'q': query}
     # custom headers
-    headers = {'Ocp-Apim-Subscription-Key': '15b80811a3d0460dbd62989feadae6bf'}
+    headers = {'Ocp-Apim-Subscription-Key': '6894a55bb34a4fd2b25e1ce2621824c0'}
     # make GET request
     r = requests.get(url, params=payload, headers=headers)
     # get JSON response
