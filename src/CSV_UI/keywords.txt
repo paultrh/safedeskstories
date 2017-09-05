@@ -1,10 +1,13 @@
-I am looking for the Id->842392886494683136
-#
-I am looking for the Space walks->0
-#
-I am looking for the Color->Color
-#
-I am looking for the Missions->Sts-89 (endeavor)
-#
 I am looking for the Military branch->Us navy (retired)
 #
+I am looking for the Status of a specific Astronaut whose Name is Joe f. edwards jr. 
+->Retired
+#
+I am looking for the Space flights of a specific Astronaut whose Birth date is 2/3/1958
+->1
+#
+I am looking for the Text of a specific Elon musk tweets whose Id is 842392886494683136
+->B'rt @spacex: liftoff! https://t.co/gtc39ubc7z https://t.co/serafpcpy2'
+#
+I am looking for the Actor 3 name of a specific Movie whose Gross is 303001229
+->James nesbitt

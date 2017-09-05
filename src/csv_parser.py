@@ -122,13 +122,14 @@ class Custom(Quest):
         txt += sanityzeData(res[0])
         self.keywords.append(sanityzeData(res[1]))
         print(txt + ' -> ' + '\n'.join(self.keywords))
-        with open('CSV_UI/keywords.txt', 'a+') as f:
-          f.write(txt + '->' +'\n'.join(self.keywords))
-          f.write('\n#\n')
+        
         print('\n\n\n')
         txt += " of a specific "+sanityzeData(self.entityManager.description)[:-4]+" whose "
         tmp = find
         txt += sanityzeData(tmp[0]) + " is " + sanityzeData(tmp[1]) + os.linesep
+        with open('CSV_UI/keywords.txt', 'a+') as f:
+          f.write(txt + '->' +'\n'.join(self.keywords))
+          f.write('\n#\n')
         txt += "I really need this information as soon as possible." + os.linesep
         return txt;
 

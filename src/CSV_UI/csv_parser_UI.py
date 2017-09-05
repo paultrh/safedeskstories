@@ -5,6 +5,7 @@ class App:
     
     def __init__(self, master):
         self.master = master
+        self.master.minsize(width=666, height=666)
         self.contexts = []
         self.keywordsList = []
         self.index = 0
@@ -16,17 +17,17 @@ class App:
         self.onstart();
         
         self.frameTitle = Frame(master)
-        self.frameTitle.grid(row=0,column=0)
+        self.frameTitle.pack()
         self._title = Label(self.frameTitle, text="CSV Contextualisation")
-        self._title.grid(row=0,column=0)
+        self._title.pack()
         
         self.frameKeywords = Frame(master)
-        self.frameKeywords.grid(row=1,column=0)
+        self.frameKeywords.pack()
         self._keywords = Label(self.frameKeywords, textvariable=self.v)
-        self._keywords.grid(row=1,column=0)
+        self._keywords.pack()
 
         self.contextKeywords = Frame(master)
-        self.contextKeywords.grid(row=2,column=0)
+        self.contextKeywords.pack()
         self._context = Text(self.contextKeywords, height=2, width=30)
         if (len(self.contexts[0]) < 1):
             self._context.insert(END, 'Enter context, one by line...')
@@ -35,19 +36,19 @@ class App:
         self._context.bind('<FocusIn>', self.on_entry_click)
         self._context.bind('<FocusOut>', self.on_focusout)
         self._context.config(fg = 'grey')
-        self._context.grid(row=2,column=0)
+        self._context.pack()
 
         self.frameButton = Frame(master)
-        self.frameButton.grid(row=3,column=0)
+        self.frameButton.pack()
         self._prev = Button(self.frameButton,text='Previous', command=self.onprev)
-        self._prev.grid(row=3,column=1)
+        self._prev.pack()
         self._next = Button(self.frameButton,text='Next', command=self.onnext)
-        self._next.grid(row=3,column=2)
+        self._next.pack()
 
         self.frameSave = Frame(master)
-        self.frameSave.grid(row=4,column=0)
+        self.frameSave.pack()
         self._save = Button(self.frameSave,text='Save', command=self.onsave)
-        self._save.grid(row=4,column=1)
+        self._save.pack()
 
     def formatKey(self):
          self.keywordsText = ""
