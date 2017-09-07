@@ -8,13 +8,15 @@ class App:
         self.master.minsize(width=666, height=666)
         self.contexts = []
         self.keywordsList = []
+        self.entitylist = []
         self.index = 0
         self.total = 0
         self.keywordsText = ''
         self.v = StringVar()
-        
+
+        self.getentities()
         self.getKeywords()
-        self.onstart();
+        self.onstart()
         
         self.frameTitle = Frame(master)
         self.frameTitle.pack()
@@ -28,7 +30,7 @@ class App:
 
         self.contextKeywords = Frame(master)
         self.contextKeywords.pack()
-        self._context = Text(self.contextKeywords, height=2, width=30)
+        self._context = Text(self.contextKeywords, height=10, width=60)
         if (len(self.contexts[0]) < 1):
             self._context.insert(END, 'Enter context, one by line...')
         else:
@@ -45,11 +47,22 @@ class App:
         self._next = Button(self.frameButton,text='Next', command=self.onnext)
         self._next.pack()
 
-        self.frameSave = Frame(master)
-        self.frameSave.pack()
-        self._save = Button(self.frameSave,text='Save', command=self.onsave)
-        self._save.pack()
+        self.listbox = Listbox(master)
+        self.listbox.bind('<<ListboxSelect>>', self.onselect)
+        for elt in self.entitylist:
+            self.listbox.insert(0, elt)
+        self.listbox.pack()
+        
+        self._save = Button(self.master,text='Save', command=self.onsave)
+        self._save.pack(side = BOTTOM)
 
+    def onselect(self, evt):
+        w = evt.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+        print(value)
+        self._context.insert(END, '@' + value + ' ')
+    
     def formatKey(self):
          self.keywordsText = ""
          for elt in self.keywordsList[self.index]:
@@ -58,7 +71,7 @@ class App:
          self.v.set(self.keywordsText)
             
     def getKeywords(self):
-        with open('keywords.txt', 'r+') as f:
+        with open('intents.txt', 'r+') as f:
             lines = f.read().splitlines()
             self.keywordsList = []
             tmp = []
@@ -136,6 +149,10 @@ class App:
         with open('context.txt', 'w+') as f:
             f.write(data)
         print('Saved')
+
+    def getentities(self):
+        with open('entity.txt', 'r+') as f:
+            self.entitylist = f.read().splitlines()
 
 top = Tk()
 app = App(top)            

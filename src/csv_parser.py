@@ -127,7 +127,7 @@ class Custom(Quest):
         txt += " of a specific "+sanityzeData(self.entityManager.description)[:-4]+" whose "
         tmp = find
         txt += sanityzeData(tmp[0]) + " is " + sanityzeData(tmp[1]) + os.linesep
-        with open('CSV_UI/keywords.txt', 'a+') as f:
+        with open('CSV_UI/intents.txt', 'a+') as f:
           f.write(txt + '->' +'\n'.join(self.keywords))
           f.write('\n#\n')
         txt += "I really need this information as soon as possible." + os.linesep
