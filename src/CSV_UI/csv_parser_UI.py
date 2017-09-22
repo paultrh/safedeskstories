@@ -1,9 +1,11 @@
 # tkinter csv parser contextualisation
 from tkinter import *
+from tkinter import ttk
 
 class App:
     
     def __init__(self, master):
+        ### PAGE 1 ATTR
         self.master = master
         self.master.minsize(width=666, height=666)
         self.contexts = []
@@ -17,18 +19,37 @@ class App:
         self.getentities()
         self.getKeywords()
         self.onstart()
+
+
+        ### PAGE 2 ATTR
+
+        self.SPAMUser = StringVar()
         
-        self.frameTitle = Frame(master)
+
+        self.notebook = ttk.Notebook(master)
+        self.notebook.pack()
+        self.f1 = ttk.Frame(self.notebook)   # first page, which would get widgets gridded into it
+        self.f2 = ttk.Frame(self.notebook)   # second page
+        self.f3 = ttk.Frame(self.notebook)   # second page
+        self.notebook.add(self.f1, text='Comprehension')
+        self.notebook.add(self.f2, text='SPAM')
+        self.notebook.add(self.f3, text='Templates')
+
+
+        #### PAGE 1
+
+        
+        self.frameTitle = Frame(self.f1)
         self.frameTitle.pack()
         self._title = Label(self.frameTitle, text="CSV Contextualisation")
         self._title.pack()
         
-        self.frameKeywords = Frame(master)
+        self.frameKeywords = Frame(self.f1)
         self.frameKeywords.pack()
         self._keywords = Label(self.frameKeywords, textvariable=self.v)
         self._keywords.pack()
 
-        self.contextKeywords = Frame(master)
+        self.contextKeywords = Frame(self.f1)
         self.contextKeywords.pack()
         self._context = Text(self.contextKeywords, height=10, width=60)
         if (len(self.contexts[0]) < 1):
@@ -40,22 +61,214 @@ class App:
         self._context.config(fg = 'grey')
         self._context.pack()
 
-        self.frameButton = Frame(master)
+        self.frameButton = Frame(self.f1)
         self.frameButton.pack()
         self._prev = Button(self.frameButton,text='Previous', command=self.onprev)
         self._prev.pack()
         self._next = Button(self.frameButton,text='Next', command=self.onnext)
         self._next.pack()
 
-        self.listbox = Listbox(master)
+        self.listbox = Listbox(self.f1)
         self.listbox.bind('<<ListboxSelect>>', self.onselect)
         for elt in self.entitylist:
             self.listbox.insert(0, elt)
         self.listbox.pack()
         
-        self._save = Button(self.master,text='Save', command=self.onsave)
+        self._save = Button(self.f1,text='Save', command=self.onsave)
         self._save.pack(side = BOTTOM)
 
+
+        #### PAGE 2
+
+        self.frameTitle2 = Frame(self.f2)
+        self.frameTitle2.pack()
+        self._title2 = Label(self.frameTitle, text="SPAM CONFIGURATION")
+        self._title2.pack()
+
+        self.subTitle2 = Frame(self.f2)
+        self.subTitle2.pack()
+        self.page2FrameRight = Frame(self.f2)
+        self.page2FrameRight.pack(side=RIGHT)
+        self.page2FrameLeft = Frame(self.f2)
+        self.page2FrameLeft.pack(side=LEFT)
+
+        self._titleListSpam = Label(self.page2FrameRight, text="VALID SPAMS")
+        self._titleListSpam.pack()
+        self.listboxSPAM = Listbox(self.page2FrameRight, width=40)
+        self.listboxSPAM.pack()
+
+        self._titleADDSpam = Button(self.page2FrameRight, bg="RED", text="DELETE", command=self.removeSPAM)
+        self._titleADDSpam.pack()
+
+        self._titleADDSpam = Label(self.page2FrameLeft, text="ADD SPAM email")
+        self._titleADDSpam.pack()
+        self.SPAMAddFIle = Entry(self.page2FrameLeft)
+        self.SPAMAddFIle.pack()
+        self.SPAMAddFIleButton = Button(self.page2FrameLeft,bg="GREEN", text="ADD", command=self.addSPAM)
+        self.SPAMAddFIleButton.pack()
+
+        self.SPAMFile()
+
+
+        ### PAGE 3
+
+        self.page3FrameRight = Frame(self.f3)
+        self.page3FrameRight.pack(side=LEFT)
+        self.page3FrameMiddle = Frame(self.f3)
+        self.page3FrameMiddle.pack(side=LEFT)
+        self.page3FrameLeft = Frame(self.f3)
+        self.page3FrameLeft.pack(side=LEFT)
+
+        self._title3Welcome = Label(self.page3FrameRight, text="Welcome phrase")
+        self._title3Welcome.pack()
+        self.EnAdd3Welcome = Entry(self.page3FrameRight)
+        self.EnAdd3Welcome.pack()
+        self.butAdd3Welcome = Button(self.page3FrameRight, bg="GREEN", text="ADD", command=self.addWelcome)
+        self.butAdd3Welcome.pack()
+        self.listbox3Welcome = Listbox(self.page3FrameRight)
+        self.listbox3Welcome.pack()
+        self.but3WelcomeDel = Button(self.page3FrameRight, bg="RED", text="DELETE", command=self.removeWelcome)
+        self.but3WelcomeDel.pack()
+
+        self._title3Rel = Label(self.page3FrameMiddle, text="Relaunch sentence")
+        self._title3Rel.pack()
+        self.EnAdd3Relaunch = Entry(self.page3FrameMiddle)
+        self.EnAdd3Relaunch.pack()
+        self.butAdd3Rel = Button(self.page3FrameMiddle, bg="GREEN", text="ADD", command=self.addRel)
+        self.butAdd3Rel.pack()
+        self.listbox3Relaunch = Listbox(self.page3FrameMiddle)
+        self.listbox3Relaunch.pack()
+        self.but3RelDel = Button(self.page3FrameMiddle, bg="RED", text="DELETE", command=self.removeRel)
+        self.but3RelDel.pack()
+
+        self._title3End = Label(self.page3FrameLeft, text="End phrase")
+        self._title3End.pack()
+        self.EnAdd3End = Entry(self.page3FrameLeft)
+        self.EnAdd3End.pack()
+        self.butAdd3End = Button(self.page3FrameLeft, bg="GREEN", text="ADD", command=self.addEnd)
+        self.butAdd3End.pack()
+        self.listbox3End = Listbox(self.page3FrameLeft)
+        self.listbox3End.pack()
+        self.but3EndDel = Button(self.page3FrameLeft, bg="RED", text="DELETE", command=self.removeDEL)
+        self.but3EndDel.pack()
+
+        self.WelcomeFile()
+        self.RelaunchFile()
+        self.EndFile()
+
+    def removeWelcome(self):
+        lines = []
+        with open('../config/welcomePhrase.txt', 'r') as f:
+            lines = f.readlines()
+        with open('../config/welcomePhrase.txt', 'w') as f:
+            print(self.listbox3Welcome.get(ACTIVE))
+            for line in lines:
+                print(line + ' - ' +self.listbox3Welcome.get(ACTIVE))
+                if '#' in line or (len(line) > 0 and self.listbox3Welcome.get(ACTIVE) not in line):
+                    f.write(line)
+        self.WelcomeFile()
+    def removeRel(self):
+        lines = []
+        with open('../config/relaunch.txt', 'r') as f:
+            lines = f.readlines()
+        with open('../config/relaunch.txt', 'w') as f:
+            print(self.listbox3Relaunch.get(ACTIVE))
+            for line in lines:
+                print(line + ' - ' +self.listbox3Relaunch.get(ACTIVE))
+                if '#' in line or (len(line) > 0 and self.listbox3Relaunch.get(ACTIVE) not in line):
+                    f.write(line)
+        self.RelaunchFile()
+    def removeDEL(self):
+        lines = []
+        with open('../config/EndPhrase.txt', 'r') as f:
+            lines = f.readlines()
+        with open('../config/EndPhrase.txt', 'w') as f:
+            print(self.listbox3End.get(ACTIVE))
+            for line in lines:
+                print(line + ' - ' +self.listbox3End.get(ACTIVE))
+                if '#' in line or (len(line) > 0 and self.listbox3End.get(ACTIVE) not in line):
+                    f.write(line)
+        self.EndFile()
+        
+
+    def addWelcome(self):
+        with open('../config/welcomePhrase.txt', 'a') as f:
+            if len(self.EnAdd3Welcome.get()) > 0:
+                if (self.listbox3Welcome.size() == 0):
+                    f.write(self.EnAdd3Welcome.get())
+                else:
+                    f.write("\n"+self.EnAdd3Welcome.get())
+        self.EnAdd3Welcome.delete(0, END)
+        self.WelcomeFile();
+    def addRel(self):
+        with open('../config/relaunch.txt', 'a') as f:
+            if len(self.EnAdd3Relaunch.get()) > 0:
+                if (self.listbox3Relaunch.size() == 0):
+                    f.write(self.EnAdd3Relaunch.get())
+                else:
+                    f.write("\n"+self.EnAdd3Relaunch.get())
+        self.EnAdd3Relaunch.delete(0, END)
+        self.RelaunchFile();
+    def addEnd(self):
+        with open('../config/EndPhrase.txt', 'a') as f:
+            if len(self.EnAdd3End.get()) > 0:
+                if (self.listbox3End.size() == 0):
+                    f.write(self.EnAdd3End.get())
+                else:
+                    f.write("\n"+self.EnAdd3End.get())
+        self.EnAdd3End.delete(0, END)
+        self.EndFile();
+
+    def WelcomeFile(self):
+        self.listbox3Welcome.delete(0, END)
+        with open('../config/welcomePhrase.txt', 'r+') as f:
+            lines = f.read().splitlines()
+            for elt in lines:
+                self.listbox3Welcome.insert(END, str(elt))
+    def RelaunchFile(self):
+        self.listbox3Relaunch.delete(0, END)
+        with open('../config/relaunch.txt', 'r+') as f:
+            lines = f.read().splitlines()
+            for elt in lines:
+                self.listbox3Relaunch.insert(END, str(elt))
+    def EndFile(self):
+        self.listbox3End.delete(0, END)
+        with open('../config/EndPhrase.txt', 'r+') as f:
+            lines = f.read().splitlines()
+            for elt in lines:
+                self.listbox3End.insert(END, str(elt))
+    def SPAMFile(self):
+        self.listboxSPAM.delete(0, END)
+        with open('../SPAM/SpamUser.config', 'r+') as f:
+            lines = f.read().splitlines()
+            for elt in lines[2:]:
+                self.listboxSPAM.insert(END, str(elt))
+
+
+                
+
+    def addSPAM(self):
+        with open('../SPAM/SpamUser.config', 'a') as f:
+            if len(self.SPAMAddFIle.get()) > 0:
+                if (self.listboxSPAM.size() == 0):
+                    f.write(self.SPAMAddFIle.get())
+                else:
+                    f.write("\n"+self.SPAMAddFIle.get())
+        self.SPAMAddFIle.delete(0, END)
+        self.SPAMFile();
+
+    def removeSPAM(self):
+        lines = []
+        with open('../SPAM/SpamUser.config',"r") as f:
+            lines = f.readlines()
+        with open('../SPAM/SpamUser.config',"w") as f:
+            print(self.listboxSPAM.get(ACTIVE))
+            for line in lines:
+                print(line + ' - ' +self.listboxSPAM.get(ACTIVE))
+                if '#' in line or (len(line) > 0 and self.listboxSPAM.get(ACTIVE) not in line):
+                    f.write(line)
+        self.SPAMFile()
+        
     def onselect(self, evt):
         w = evt.widget
         index = int(w.curselection()[0])
