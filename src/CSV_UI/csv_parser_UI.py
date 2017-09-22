@@ -1,6 +1,8 @@
 # tkinter csv parser contextualisation
 from tkinter import *
 from tkinter import ttk
+from PIL import ImageTk, Image
+from subprocess import Popen, PIPE
 
 class App:
     
@@ -30,10 +32,12 @@ class App:
         self.notebook.pack()
         self.f1 = ttk.Frame(self.notebook)   # first page, which would get widgets gridded into it
         self.f2 = ttk.Frame(self.notebook)   # second page
-        self.f3 = ttk.Frame(self.notebook)   # second page
+        self.f3 = ttk.Frame(self.notebook)   # third page
+        self.f4 = ttk.Frame(self.notebook)   # four page
         self.notebook.add(self.f1, text='Comprehension')
         self.notebook.add(self.f2, text='SPAM')
         self.notebook.add(self.f3, text='Templates')
+        self.notebook.add(self.f4, text='GMAIL')
 
 
         #### PAGE 1
@@ -156,6 +160,52 @@ class App:
         self.RelaunchFile()
         self.EndFile()
 
+        ### PAGE 4
+
+        path = 'gmail.jpg'
+        i = Image.open(path)
+        i = i.resize((250, 250), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(i)
+        panel = Label(self.f4, image = img)
+        panel.image = img
+        panel.pack(fill = "both", expand = "yes")
+
+        self.butgmail = Button(self.f4, bg="GREEN", text="PROCESS", command=self.launchGMAIL)
+        self.butgmail.pack()
+
+        self.listbox4 = Listbox(self.f4, width=50)
+        self.listbox4.pack()
+        self.but4 = Button(self.f4, bg="RED", text="DELETE", command=self.removeGMAIL)
+        self.but4.pack()
+
+        self.ReadGmail()
+
+    def ReadGmail(self):
+        self.listbox4.delete(0, END)
+        with open('../GOOGLE/GoogleUser.config', 'r+') as f:
+            lines = f.read().splitlines()
+            for elt in lines:
+                self.listbox4.insert(END, str(elt))
+
+    def removeGMAIL(self):
+        lines = []
+        with open('../GOOGLE/GoogleUser.config', 'r') as f:
+            lines = f.readlines()
+        with open('../GOOGLE/GoogleUser.config', 'w') as f:
+            print(self.listbox4.get(ACTIVE))
+            for line in lines:
+                print(line + ' - ' +self.listbox4.get(ACTIVE))
+                if '#' in line or (len(line) > 0 and self.listbox4.get(ACTIVE) not in line):
+                    f.write(line)
+        self.ReadGmail()
+    
+    def launchGMAIL(self):
+        process = Popen(['python', 'google.py'], cwd='../', stdout=PIPE, stderr=PIPE)
+        stdout, stderr = process.communicate()
+        print(stdout)
+        print(stderr)
+        self.ReadGmail()
+        
     def removeWelcome(self):
         lines = []
         with open('../config/welcomePhrase.txt', 'r') as f:
