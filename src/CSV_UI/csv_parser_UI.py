@@ -13,6 +13,7 @@ class App:
         self.contexts = []
         self.keywordsList = []
         self.entitylist = []
+        self.entitylistAPI = ['sys.phone_number', 'sys.city', 'sys.email',  'sys.age']
         self.index = 0
         self.total = 0
         self.keywordsText = ''
@@ -72,11 +73,29 @@ class App:
         self._next = Button(self.frameButton,text='Next', command=self.onnext)
         self._next.pack()
 
-        self.listbox = Listbox(self.f1)
+        self.frameIntents = Frame(self.f1)
+        self.frameIntents.pack()
+        self.frameIntentsR = Frame(self.frameIntents)
+        self.frameIntentsR.pack(side=RIGHT)
+        self.frameIntentsL = Frame(self.frameIntents)
+        self.frameIntentsL.pack(side=LEFT)
+        
+        self.titleIntents = Label(self.frameIntentsR, text="Story Intents")
+        self.titleIntents.pack()
+        self.listbox = Listbox(self.frameIntentsR)
         self.listbox.bind('<<ListboxSelect>>', self.onselect)
         for elt in self.entitylist:
             self.listbox.insert(0, elt)
         self.listbox.pack()
+
+        
+        self.titleIntentsAPI = Label(self.frameIntentsL, text="API Intents")
+        self.titleIntentsAPI.pack()
+        self.listboxAPI = Listbox(self.frameIntentsL)
+        self.listboxAPI.bind('<<ListboxSelect>>', self.onselectAPI)
+        for elt in self.entitylistAPI:
+            self.listboxAPI.insert(0, elt)
+        self.listboxAPI.pack()
         
         self._save = Button(self.f1,text='Save', command=self.onsave)
         self._save.pack(side = BOTTOM)
@@ -217,6 +236,7 @@ class App:
                 if '#' in line or (len(line) > 0 and self.listbox3Welcome.get(ACTIVE) not in line):
                     f.write(line)
         self.WelcomeFile()
+        
     def removeRel(self):
         lines = []
         with open('../config/relaunch.txt', 'r') as f:
@@ -320,6 +340,13 @@ class App:
         self.SPAMFile()
         
     def onselect(self, evt):
+        w = evt.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+        print(value)
+        self._context.insert(END, '@' + value + ' ')
+        
+    def onselectAPI(self, evt):
         w = evt.widget
         index = int(w.curselection()[0])
         value = w.get(index)
