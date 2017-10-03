@@ -14,6 +14,7 @@ from subprocess import check_call
 from contact import *
 from company import *
 from csv_parser import *
+from attachement import *
 from story import *
 from quest import *
 import shutil
@@ -248,9 +249,9 @@ points_credit = []
 for i in range(0, nb_iteration):
     points_credit.append(total_points / nb_iteration)
 
-scenario = ['contact', 'company', 'csv_parser']
+scenario = ['contact', 'company', 'csv_parser', 'attachements']
 #API.AI not implemented everywhere
-scenario = ['csv_parser']
+scenario = ['attachements', 'contact']
 contries = ['en_GB', 'en_US', 'pt_BR', 'fr_FR']
 levels = []
 
@@ -275,7 +276,9 @@ for i in range(1, nbLevels):
             elif (destiny == 'company'):
                 quests += generateCompany(idcount, sender['email'], 200, False, "plop", signature, fake, isLast, level, z)
             elif (destiny == 'csv_parser'):
-                quests += generateCustom(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level, z)    
+                quests += generateCustom(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level, z)
+            elif (destiny == 'attachements'):
+                quests += generateAttachement(idcount, sender['email'], 300, False, "plop", signature, fake, isLast, level, z)    
             idcount += 3
             print(' Completed')
 

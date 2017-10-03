@@ -145,6 +145,7 @@ class Quest():
     content = None
     signature = ""
     islast = False
+    attachement = False
     
     def __init__(self, start_id, current_id, story_name, sender,
                  subject, body, keywords, score, is_bad, is_timeout, signature, islast, level):
@@ -162,6 +163,7 @@ class Quest():
         self.islast = islast
         self.content = 0
         self.signature = signature
+        self.attachement = False
         
     def generateInitFile(self):
         self.evil = Evil(self)
@@ -193,6 +195,7 @@ class Quest():
             ('good', self.good),
             ('bad', self.bad),
             ('timeout', self.timeOut),
+            ('withAttachment', self.attachement)
           ])
 
         return serialize
